@@ -1,0 +1,14 @@
+id: brief-setup
+type: module
+visibility: private
+status: poc
+version: 0.2.4
+module: module_brief
+owns:
+  - "agents/.template/.claude/skills-bundle/brief-setup/**"
+requires:
+  framework: ">=1.30.0"
+publish_target: none
+# kit_life 2.37.0 (dec-219): the kit's own setup step. Owns the briefing-time
+# question, change-time requests and their owner copy; calls the framework
+# setter routines/set-briefing-times.sh (DGN-1806) and never re-implements it.

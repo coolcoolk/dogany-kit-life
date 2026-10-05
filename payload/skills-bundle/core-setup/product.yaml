@@ -1,0 +1,15 @@
+id: core-setup
+type: module
+visibility: public
+status: official
+version: 0.2.0
+module: module_core
+owns:
+  - "agents/.template/.claude/skills-bundle/core-setup/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-agent
+# The kit-owned onboarding interview (kit_life 2.22.0). Ownership moved from
+# pack_health per the 2026-09-18 kit/pack boundary ruling: the procedure (how
+# to ask) is kit; prescription numbers stay in the pack. The engine is
+# kit_life.py onboard-* -- this skill is the narration contract only.

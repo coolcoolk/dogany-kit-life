@@ -1,0 +1,19 @@
+id: place-manage
+type: module
+visibility: public
+status: official
+version: 0.2.0
+module: module_place
+owns:
+  - "agents/.template/.claude/skills-bundle/place-manage/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-agent
+# The conversational door of the place registry, split out of appointment-log
+# in 2.19.0. Reading a known place is a function call (kit_life.sh
+# place-resolve) that loads nothing; this skill exists only for the turns where
+# the user has to be asked.
+#
+# NOT a module_place declaration. Whether place becomes a module is an open
+# owner decision (kit_life 2.19.0 scope doc, "안 들어간다"); pack-manifest.json
+# modules[] is deliberately untouched by this skill.

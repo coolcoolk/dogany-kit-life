@@ -1,0 +1,35 @@
+# offer.tsv -- the first-install offer (i18n life_setup.offer) -> bundle rows.
+# kit_life 2.37.0 (owner-approved onboarding rehearsal 2026-10-01 08:05; the
+# framework's lifekit.offer points here, DGN-1809).
+#
+# One row per bullet of life_setup.offer, in bullet order (the n-th "• " line
+# of the offer, ko and en alike). Two groups: 캘린더 관리 (calendar) and
+# 식사·운동·인바디 (health). The owner picks which one to TRY FIRST -- not
+# what to enable:
+#   - every kit SKILL row (bundle.conf kind=skill) is switched on at install,
+#     whatever the pick (owner 2026-10-01: all groups on, no per-item enable);
+#   - a group's ROUTINE rows (bundle.conf kind=routine: morning-brief,
+#     daily-retro, weekly-review, day-card) are switched on only when that
+#     group STARTS.
+#     The health group has no routine, so a meal-only start gets no brief and
+#     no retro ("스케줄 세팅 안 했는데 오는 게 이상해", owner 07:15).
+#
+# Format: <n> <TAB> <group> <TAB> <modules, comma-separated> <TAB> <times>
+#   n        1-based bullet ordinal in life_setup.offer
+#   group    stable id for the pick; the button label is i18n
+#            life_setup.group.<group>
+#   modules  pack-manifest.json "modules" tokens used in bundle.conf col 5.
+#            The group = every bundle.conf row whose module is listed.
+#   times    yes = the group holds the briefing routines (morning-brief /
+#            daily-retro): when it starts, they are switched on at the
+#            bundle.conf time and the time is TOLD, not asked
+#            (briefing_times.sh --slots -> life_setup.tell.*, one keep
+#            button life_setup.keep_button). no = nothing to tell.
+#
+# Not offered (by design): module_core (brief-setup, core-setup) goes on
+# with the kit itself; module_goal (goal-session) and the goal interview are
+# owner-started only -- the kit never asks for a goal top-down.
+# The flow step by step: skills-bundle/brief-setup/first-install.md.
+# Held by database/tests/test_kit2370_life_setup.py (O1-O3).
+1	calendar	module_schedule,module_place,module_routine,module_person,module_brief	yes
+2	health	module_meal,module_workout,module_health	no

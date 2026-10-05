@@ -1,0 +1,98 @@
+-- 035_place_address.sql  (target user_version 35)
+--
+-- reversible: yes, losslessly, WITHOUT a table rebuild.
+--   Rollback = the column is inert to every pre-035 reader: `address` is
+--   NULLable with no DEFAULT and no CHECK, so every pre-035 INSERT that omits
+--   it still succeeds and no pre-035 SELECT names it. Leaving it in place is a
+--   complete rollback on its own.
+--   SQLite >= 3.35 additionally supports
+--     ALTER TABLE place DROP COLUMN address;
+--   No row is inserted, deleted, re-keyed or rewritten. There is NO backfill
+--   statement in this file (see WHY NO BACKFILL), so the rollback surface is
+--   exactly one DDL statement.
+--
+-- ==========================================================================
+-- WHAT. A place learns the string a MAP can resolve, separately from the name
+-- the user calls it.
+--
+--   address   TEXT   the map-routable string for this place. NULL = unknown.
+--
+-- ==========================================================================
+-- WHY. `place` stores a display name and nothing else. The automatic travel
+-- resolver (routines/travel-resolve.sh) hands that name verbatim to the map
+-- puller, which types it into map autocomplete and requires an option hit. A
+-- POI-shaped name (a station, a landmark) hits. A HUMAN NICKNAME (whatever the
+-- user privately calls a location) can never hit, because it is not a place
+-- any map has heard of.
+--
+-- The consequence is not a crash -- the resolver is correctly fail-open, so it
+-- returns FAILED and the appointment skill asks the user for the one-way
+-- minutes. That ask is a designed fallback, and for a nicknamed place it fires
+-- EVERY time, forever, because nothing in the system ever learns what the
+-- nickname means. The registry is supposed to be ask-once; for nicknames it is
+-- ask-always.
+--
+-- One address, stored once, converts a recurring per-appointment ask into a
+-- one-time ask and lets every future leg derive itself.
+--
+-- ==========================================================================
+-- WHY NOT `aliases`. aliases already carries address-shaped strings on any row
+-- registered from a decorated calendar location, e.g.
+-- "<poi>, <street>, <district>, <city>, <country>". That is not the same job
+-- and must not be conflated:
+--   aliases  = MATCH keys. Every string a stored location text might arrive as.
+--              _resolve_location_place() scans them for an exact hit.
+--   address  = the ONE string to hand a map. Exactly one per place, or none.
+-- A list whose members are all equally "the name" cannot answer "which of
+-- these do I type into the map", and _resolve_location_place would start
+-- matching appointment text against an address by accident. Two jobs, two
+-- columns.
+--
+-- ==========================================================================
+-- WHY NO BACKFILL. Rows carrying a comma-decorated alias LOOK backfillable by
+-- lifting that alias into address. This migration deliberately does not, for
+-- the same reason 034 refused to relabel hold history: the rule that picks
+-- "the address-shaped alias" out of a list is a guess, and those rows are
+-- exactly the ones whose bare names ALREADY autocomplete -- so the backfill
+-- would carry all of the risk and none of the benefit. The rows that actually
+-- need an address are bare nicknames with no alias to lift; only the user
+-- knows them, and the elicit path asks once.
+--
+-- ==========================================================================
+-- WHY NO CHECK / NO NOT NULL / NO INDEX.
+--   * NOT NULL is impossible and wrong: existing rows have no address and no
+--     way to invent one, and a place is perfectly usable without one.
+--   * A CHECK cannot validate an address -- "is this routable" is answerable
+--     only by the map, at route time. A format CHECK would reject valid input
+--     (a lot-number address, a POI + building, a plus code) and accept
+--     unroutable input. The route drive is the validator; it already fails open.
+--   * No index: `address` is never a lookup key. Places are found by name,
+--     alias, id or ulid; address is read only AFTER a place is resolved.
+--
+-- ==========================================================================
+-- READER SAFETY (measured, not assumed). Every `place` reader in kit_life.py
+-- either names its columns or goes through _travel_row/_travel_rows, which set
+-- sqlite3.Row and return dict(r) -- a new column appears as an extra dict key
+-- and breaks nothing. The `SELECT * FROM place` sites (travel_place_get,
+-- _resolve_location_place) are all on that path. Every renderer that joins
+-- place selects named columns. No positional-index consumer of a place row
+-- exists. Nothing reads `address` at all until the resolver is wired.
+--
+-- WRITER SAFETY. The only positional (VALUES-by-position) INSERT into place in
+-- the kit payload is the base-row seed in schema.sql, which is widened in the
+-- same change; every other insert names its columns and is arity-safe.
+--
+-- BEHAVIOURAL DELTA OF THIS FILE ALONE: zero. This migration is observable
+-- only as a column that exists.
+
+BEGIN;
+
+-- A1: the map-routable string for this place. NULL = not known; the resolver
+-- falls back to routing the name, which is exactly today's behaviour. Appended
+-- at the end of the table by ALTER, matching the column order schema.sql
+-- declares for a fresh mint.
+ALTER TABLE place ADD COLUMN address TEXT;
+
+PRAGMA user_version = 35;
+
+COMMIT;

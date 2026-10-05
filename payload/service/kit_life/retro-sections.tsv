@@ -1,0 +1,5 @@
+# retro-sections registry (database/retro_sections.py): <module>\t<command>
+# Axis state (축 상태): weekly lane only, lapsed axes only, at most 3 lines,
+# no decision. Silent (exit 3) on the daily lane and on a week with nothing
+# lapsed. Resolvers: database/axis_state.py; rows: axis.conf.
+module_core	axis-lapsed

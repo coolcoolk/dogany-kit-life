@@ -1,0 +1,11 @@
+id: ledger-view
+type: module
+visibility: private
+status: poc
+version: 0.2.0
+module: module_ledger
+owns:
+  - "agents/.template/.claude/skills-bundle/ledger-view/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: none

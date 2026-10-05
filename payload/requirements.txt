@@ -1,0 +1,33 @@
+# kit_life runtime python dependencies (declared by the kit; provisioned into the
+# instance runtime at pack install/update; each dep updates on its OWN pip
+# cadence -- independent of the kit_life pack version line).
+#
+# holidays: powers the routine cadence "!hol" exclusion (holiday_source.py).
+#   Dynamic, multi-country, OFFLINE. Optional at runtime -- holiday_source falls
+#   back to a small static KR table when absent, so a fresh instance still works
+#   before this dep is provisioned.
+#
+#   FLOOR RAISED 2026-09-23 (>=0.83 -> >=0.102). The old floor was satisfiable by
+#   a version that ships a WRONG table, so the dependency check passed forever
+#   while the output was wrong -- the declaration was true and the calendar was
+#   not. Measured, same machine, same day:
+#
+#     0.83    KR 2026 = 20 days   KR 2027 = 20 days
+#     0.102   KR 2026 = 22 days   KR 2027 = 24 days
+#             (0.83 is missing 노동절 05-01 and 제헌절 07-17, plus the 2027
+#              substitute holidays 05-03 / 07-19)
+#
+#   0.83 is also the NEWEST release installable on Python 3.9 (holidays requires
+#   >=3.10 from 0.84 on), so a 3.9 runtime could never converge by upgrading --
+#   `pip install --upgrade` reported "already satisfied" and stayed wrong. The
+#   raised floor makes that runtime fail LOUDLY at provisioning instead of
+#   silently materializing work blocks onto public holidays.
+#
+#   This line is therefore also the kit's INTERPRETER floor declaration: >=0.102
+#   transitively requires Python >=3.10. Consumers resolve their interpreter FROM
+#   this, never from a hardcoded path -- a second hardcoded floor is a second
+#   place for this to drift.
+#
+#   0.102 (not 0.105) because 0.102 is the oldest release MEASURED to carry the
+#   correct KR table. Do not raise it further without a measurement.
+holidays>=0.102
