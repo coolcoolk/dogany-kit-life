@@ -1,0 +1,23 @@
+# Runtime residue -- never part of the pack payload (compat-lint C4/C4b/C5 guard).
+# The pack payload is source only (schema.sql, migrations, *.py); any *.db is a
+# runtime artifact (e.g. mirror/mirror_state.db regenerated when the mirror runs
+# in-tree) and any *.bak* is an edit backup. Keep them out of git and out of the
+# published pack.
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.bak-*
+*.bak.*
+*~
+*.orig
+*.swp
+
+# Python / pytest scratch
+__pycache__/
+.pytest_cache/
+
+# local quarantine of pre-cutover backups -- owner data, never publish
+.bak-quarantine/
+*.bak-*
+.test-durations

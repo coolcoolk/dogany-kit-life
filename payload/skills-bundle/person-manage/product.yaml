@@ -1,0 +1,11 @@
+id: person-manage
+type: module
+visibility: public
+status: official
+version: 0.2.0
+module: module_person
+owns:
+  - "agents/.template/.claude/skills-bundle/person-manage/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-agent

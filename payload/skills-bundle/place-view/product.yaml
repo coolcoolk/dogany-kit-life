@@ -1,0 +1,17 @@
+id: place-view
+type: module
+visibility: public
+status: official
+version: 0.2.1
+module: module_place
+owns:
+  - "payload/skills-bundle/place-view/**"
+  - "payload/routines/bundle/travel-resolve.sh"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-lifekit
+# Not a standalone convenience skill. schedule-log's travel-resolve leg calls
+# route.sh directly, so the keyless "never ask the user 편도 몇 분" contract is
+# broken the moment this module is absent -- ship them together or not at all.
+# Runtime dependency: agent-browser on PATH (route.sh preflights and exits 4).
+# Instance config: ROUTE_HOME_ADDR in config/agent.conf (empty-origin default).

@@ -1,0 +1,11 @@
+id: episode-log
+type: module
+visibility: private
+status: poc
+version: 0.2.0
+module: module_episode
+owns:
+  - "agents/.template/.claude/skills-bundle/episode-log/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: none

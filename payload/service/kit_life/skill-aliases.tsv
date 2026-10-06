@@ -1,0 +1,22 @@
+# skill-aliases.tsv -- retired kit skill id -> the id that replaced it.
+# The ONE alias table (kit_life 2.38.0 slot rename, owner 2026-09-30:
+# <module stem>-<slot>; place split out as module_place the same day).
+# Read by `kit_life.sh skill-alias` (database/skill_alias.py) and by the
+# slot lint (test_skill_slot_convention.py L8/L9). Nothing else may name an
+# old id outside CHANGELOG history.
+#
+# Format: <old id> <TAB> <new id>
+#   old  never a live skill dir again (L9); listed once
+#   new  a live payload/skills-bundle/<new>/ dir (L9)
+meal-capture	meal-log
+relationship	person-manage
+relationship-care	person-session
+goal-setting	goal-session
+dogany-routine	routine-manage
+inbody-capture	health-log
+place-setup	place-manage
+route-find	place-view
+entity-flow	ledger-view
+retro-reflection	brief-session
+life-onboarding	core-setup
+life-setup	brief-setup

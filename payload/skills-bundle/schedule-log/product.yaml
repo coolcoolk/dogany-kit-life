@@ -1,0 +1,17 @@
+id: schedule-log
+type: module
+visibility: public
+status: official
+version: 0.2.2
+module: module_schedule
+owns:
+  - "agents/.template/.claude/skills-bundle/schedule-log/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-agent
+# 2.19.0 merge of appointment-log + task-update. The execution axis is an AXIS,
+# not a module -- storage was already one `block` table with a `kind` column and
+# the mirror routes on time-ness, not kind, so the two-skill split matched
+# neither line. `type: module` above is the product-registry vocabulary for a
+# shippable unit; it does NOT declare a module_* entity in pack-manifest.json
+# (module_appointment / module_task were dismantled in the same cut).

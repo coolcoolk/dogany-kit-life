@@ -1,0 +1,53 @@
+# module-owners.tsv -- module ownership of the NON-skill surfaces (2.38.0).
+# Skills: product.yaml `module:` (must agree with bundle.conf's module column).
+# Anything not matched here (kit_life.py, kit_life.sh, schema, migrations,
+# tests, bundle.conf) is kit-level and never bumps a module.
+# Format: <kind> TAB <match> TAB <module>
+#   file  repo-relative path prefix
+#   key   i18n key prefix (longest wins; matched as prefix of the key)
+file	payload/routines/bundle/morning-brief.sh	module_brief
+file	payload/routines/bundle/morning_brief_card.py	module_brief
+file	payload/routines/bundle/daily-retro.sh	module_brief
+file	payload/routines/bundle/weekly-review.sh	module_brief
+file	payload/routines/bundle/life_dashboard.py	module_brief
+file	payload/routines/bundle/brief-standard.sh	module_brief
+file	payload/routines/bundle/day-card	module_schedule
+file	payload/routines/bundle/travel-resolve.sh	module_schedule
+key	brief.	module_brief
+key	retro.	module_brief
+key	axis.retro	module_brief
+key	fatigue.	module_brief
+key	domain.	module_brief
+key	bundle.morning_brief	module_brief
+key	bundle.daily_retro	module_brief
+key	bundle.weekly_review	module_brief
+key	schedule.	module_schedule
+key	day.	module_schedule
+key	remind.	module_schedule
+key	travel.	module_schedule
+key	bundle.schedule_log	module_schedule
+key	bundle.place_manage	module_place
+key	bundle.day_card	module_schedule
+key	axis.execution	module_schedule
+key	person.	module_person
+key	near_match.	module_person
+key	axis.person	module_person
+key	bundle.person_manage	module_person
+key	bundle.person_session	module_person
+key	goal.	module_goal
+key	axis.goal	module_goal
+key	bundle.goal_session	module_goal
+key	meal.	module_meal
+key	axis.meal	module_meal
+key	bundle.meal_log	module_meal
+key	bundle.workout_log	module_workout
+key	bundle.health_log	module_health
+key	axis.routine	module_routine
+key	bundle.routine_manage	module_routine
+key	axis.episode	module_episode
+key	axis.spend	module_ledger
+key	life_setup.	module_brief
+key	life_skeleton.	module_core
+key	onboard.	module_core
+key	bundle.life_	module_core
+key	bundle.core_setup	module_core

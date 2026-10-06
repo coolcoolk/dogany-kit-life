@@ -1,0 +1,160 @@
+{
+  "id": "kit_life",
+  "name_en": "Lifekit",
+  "name_ko": "라이프킷",
+  "kind": "kit",
+  "provides_kit": "kit_life",
+  "base_units": {
+    "primary_unit": "timeblock",
+    "resource_units": [
+      {
+        "key": "time",
+        "unit": "timeblock",
+        "table": "timeblock"
+      },
+      {
+        "key": "place",
+        "unit": "place",
+        "table": "place"
+      },
+      {
+        "key": "person",
+        "unit": "person",
+        "table": "persons"
+      },
+      {
+        "key": "money",
+        "unit": "entry",
+        "table": "spend_entry"
+      },
+      {
+        "key": "body",
+        "unit": "metric",
+        "table": "metric_log"
+      }
+    ]
+  },
+  "modules": [
+    "module_meal",
+    "module_episode",
+    "module_person",
+    "module_goal",
+    "module_routine",
+    "module_workout",
+    "module_health",
+    "module_schedule",
+    "module_place",
+    "module_brief",
+    "module_core",
+    "module_ledger"
+  ],
+  "module_versions": {
+    "module_meal": "0.2.0",
+    "module_episode": "0.2.0",
+    "module_person": "0.2.0",
+    "module_goal": "0.2.1",
+    "module_routine": "0.2.0",
+    "module_workout": "0.1.0",
+    "module_health": "0.2.0",
+    "module_schedule": "0.2.2",
+    "module_place": "0.2.1",
+    "module_brief": "0.2.4",
+    "module_core": "0.2.0",
+    "module_ledger": "0.2.0"
+  },
+  "skills": [
+    {
+      "name": "episode-setup",
+      "sharing_mode": "own",
+      "module": "module_episode"
+    },
+    {
+      "name": "episode-session",
+      "sharing_mode": "own",
+      "module": "module_episode"
+    },
+    {
+      "name": "episode-log",
+      "sharing_mode": "own",
+      "module": "module_episode"
+    },
+    {
+      "name": "meal-log",
+      "sharing_mode": "own",
+      "module": "module_meal"
+    },
+    {
+      "name": "brief-session",
+      "sharing_mode": "own",
+      "module": "module_brief"
+    },
+    {
+      "name": "place-view",
+      "sharing_mode": "own",
+      "module": "module_place"
+    },
+    {
+      "name": "schedule-log",
+      "sharing_mode": "own",
+      "module": "module_schedule"
+    },
+    {
+      "name": "place-manage",
+      "sharing_mode": "own",
+      "module": "module_place"
+    },
+    {
+      "name": "routine-manage",
+      "sharing_mode": "own",
+      "module": "module_routine"
+    },
+    {
+      "name": "ledger-view",
+      "sharing_mode": "own",
+      "module": "module_ledger"
+    },
+    {
+      "name": "person-manage",
+      "sharing_mode": "own",
+      "module": "module_person"
+    },
+    {
+      "name": "person-session",
+      "sharing_mode": "own",
+      "module": "module_person"
+    },
+    {
+      "name": "goal-session",
+      "sharing_mode": "own",
+      "module": "module_goal"
+    },
+    {
+      "name": "core-setup",
+      "sharing_mode": "own",
+      "module": "module_core"
+    },
+    {
+      "name": "brief-setup",
+      "sharing_mode": "own",
+      "module": "module_brief"
+    },
+    {
+      "name": "health-log",
+      "sharing_mode": "own",
+      "module": "module_health"
+    },
+    {
+      "name": "workout-log",
+      "sharing_mode": "own",
+      "module": "module_workout"
+    }
+  ],
+  "handover_brief_verb": "handover-brief",
+  "vocab_verb": "vocab",
+  "pack_version": "2.41.0",
+  "contract_version": 1,
+  "requires_framework": ">=2.6.0-dev.72",
+  "payload_root": "payload",
+  "deploy_owner": "skull",
+  "status": "published"
+}

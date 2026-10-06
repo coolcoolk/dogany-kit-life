@@ -1,0 +1,11 @@
+id: routine-manage
+type: module
+visibility: public
+status: official
+version: 0.2.0
+module: module_routine
+owns:
+  - "agents/.template/.claude/skills-bundle/routine-manage/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-agent

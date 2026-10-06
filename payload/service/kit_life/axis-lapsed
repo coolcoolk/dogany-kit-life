@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""axis-lapsed -- the kit's own weekly-retro section provider (axis state).
+
+Registered in service/kit_life/retro-sections.tsv; invoked by the retro
+extension point (database/retro_sections.py) as
+
+    axis-lapsed [--db PATH] [--today YYYY-MM-DD] --lane daily|weekly --mode line|section
+
+Weekly lane only: prints the lapsed-axis lines from database/axis_state.py
+(at most 3). Exit 3 = nothing to show: the daily lane, no kit_life.db, or no
+axis lapsed this week. Opens the database read-only (the provider contract:
+it reports, it never writes).
+"""
+import argparse
+import datetime
+import os
+import sqlite3
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATABASE_DIR = os.path.join(os.path.dirname(os.path.dirname(HERE)), 'database')
+NOTHING = 3
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog='axis-lapsed')
+    ap.add_argument('--lane', choices=('daily', 'weekly'), required=True)
+    ap.add_argument('--mode', choices=('line', 'section'), default='section')
+    ap.add_argument('--db', default=None)
+    ap.add_argument('--today', default=None)
+    a = ap.parse_args(argv)
+    if a.lane != 'weekly':
+        return NOTHING
+
+    sys.path.insert(0, DATABASE_DIR)
+    import agent_conf  # noqa: E402
+    import axis_state  # noqa: E402
+
+    db = a.db or os.path.join(DATABASE_DIR, 'kit_life.db')
+    if not os.path.isfile(db):
+        return NOTHING
+    today = a.today or datetime.date.today().isoformat()
+    lang = agent_conf.conf_str('AGENT_LANG', 'en', allowed={'ko', 'en'})
+
+    def skipped(axis_id, exc):
+        print('[axis-lapsed] %s skipped: %s' % (axis_id, exc), file=sys.stderr)
+
+    conn = sqlite3.connect('file:%s?mode=ro' % db, uri=True)
+    try:
+        lines = axis_state.weekly_section(conn, today, lang=lang,
+                                          on_error=skipped)
+    finally:
+        conn.close()
+    if not lines:
+        return NOTHING
+    print('\n'.join(lines))
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
