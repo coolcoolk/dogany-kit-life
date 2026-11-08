@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+"""Read-only daily regimen miss check. Existing regimen.single copy only."""
+import argparse
+import datetime as dt
+import json
+import os
+from pathlib import Path
+import sys
+from zoneinfo import ZoneInfo
+
+DB = Path(__file__).resolve().parents[2] / 'database'
+sys.path.insert(0, str(DB))
+import health_regimen as H
+import kit_life as K
+import ro_open
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--lane', choices=('daily', 'weekly', 'morning'), required=True)
+    ap.add_argument('--mode', choices=('line', 'section'), default='line')
+    ap.add_argument('--db', default=str(DB / 'kit_life.db'))
+    ap.add_argument('--today', default=os.environ.get('KIT_RETRO_TODAY'))
+    ap.add_argument('--now')
+    args = ap.parse_args()
+    if args.lane != 'daily' or not Path(args.db).is_file():
+        return 3
+    now = H.instant(args.now)
+    day = args.today or str(now.astimezone(ZoneInfo('Asia/Seoul')).date())
+    # KIT_RETRO_TODAY is also how dry composers select a historical date.
+    if args.today and not args.now:
+        now = dt.datetime.combine(dt.date.fromisoformat(day), dt.time(21), ZoneInfo('Asia/Seoul'))
+    with ro_open.open_ro(args.db) as conn:
+        items = H.retro_items(K, conn, day, now=H.iso(now))
+    if not items:
+        return 3
+    if args.mode == 'line':
+        print(json.dumps(dict(items=items), ensure_ascii=False))
+    else:
+        print('\n'.join(i['text'] for i in items))
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

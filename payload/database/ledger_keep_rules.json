@@ -1,0 +1,6 @@
+{
+  "_doc": "ledger v6 (NS4): the engine's PROPOSAL for 포기 못 함 (must) / 줄일 수 있음 (reducible) / 포기 가능 (droppable) per recurring stream class. The owner confirms or flips in one pass; keep_by='owner' is never overwritten. D4 (owner 2026-10-12 17:35): saving is must; it is offered as a lever only as the last resort. A subscription is reducible when the service has a tier ladder (subscription_tiers.json) or is a sizable share of money out; droppable when it is under droppable_share of money out and has no tier ladder.",
+  "must": ["housing", "loan", "insurance", "utility", "telecom", "saving", "tax"],
+  "subscription": {"reducible_if_tiers": true, "droppable_share": 0.01},
+  "default": "reducible"
+}

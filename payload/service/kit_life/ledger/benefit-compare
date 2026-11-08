@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Read-only purchase comparison using saved, sourced benefit facts."""
+import argparse
+import json
+import sys
+sys.dont_write_bytecode = True
+from ledgerlib import benefits, kit
+
+p = argparse.ArgumentParser(prog='benefit-compare')
+p.add_argument('--data', required=True, help='purchase JSON: date, amount, merchant, category, optional funding')
+p.add_argument('--json', action='store_true')
+a = p.parse_args()
+try:
+    result = kit.run('ledger-benefit-compare', '--data', a.data)
+    print(json.dumps(result, ensure_ascii=False) if a.json else benefits.render(result))
+except (kit.KitError, ValueError) as exc:
+    print(json.dumps(dict(error=str(exc)), ensure_ascii=False))
+    sys.exit(2)

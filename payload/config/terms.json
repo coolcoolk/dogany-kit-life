@@ -1,0 +1,15 @@
+{
+  "format": "dogany-term-dict/1",
+  "note": "DGN-1500 kit layer seed for kit_life, from the lifekit-terms glossary draft. Only rows the draft marks owner-confirmed are seeded; the other 14 kit rows are proposals and stay out until the owner confirms them (DGN-462 lane). pack_install.sh stamps layer=kit / owner=kit_life on install.",
+  "allow": [],
+  "entries": [
+    {
+      "id": "task",
+      "canonical": "할 일",
+      "forbidden": ["태스크"],
+      "rewrite": false,
+      "approved": "owner 2026-09-16 08:21 (Task -> 할 일)",
+      "note": "Draft also lists two general work nouns; left out -- ordinary Korean, they would count most of any conversation. Counted only: the loanword ends without a final consonant and the canonical ends with one, so particles would break on a rewrite."
+    }
+  ]
+}

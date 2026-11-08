@@ -1,0 +1,107 @@
+{
+  "_doc": "ledger v6 (L7): the Banksalad export's 대분류 (major) and 대분류/소분류 (sub) -> ONE kit category vocabulary [spend_category key, display]. Sub wins over major. A category already in the ledger is found by key OR display name, never duplicated (식비/식생활 one bucket, 구독/서비스구독 one). `group` is the diagnosis' own grouping of the variable spend (read by ledger_diag), keyed by the same major; `sub_group` overrides it for one sub.",
+  "major": {
+    "식비": [
+      "food",
+      "식비"
+    ],
+    "카페/간식": [
+      "cafe_snack",
+      "카페/간식"
+    ],
+    "술/유흥": [
+      "food",
+      "식비"
+    ],
+    "생활": [
+      "household",
+      "생활용품"
+    ],
+    "온라인쇼핑": [
+      "shopping",
+      "쇼핑"
+    ],
+    "패션/쇼핑": [
+      "shopping",
+      "쇼핑"
+    ],
+    "뷰티/미용": [
+      "shopping",
+      "쇼핑"
+    ],
+    "교통": [
+      "transport",
+      "교통"
+    ],
+    "자동차": [
+      "transport",
+      "교통"
+    ],
+    "문화/여가": [
+      "leisure",
+      "콘텐츠와 취미"
+    ],
+    "여행/숙박": [
+      "travel",
+      "여행"
+    ],
+    "의료/건강": [
+      "health",
+      "건강"
+    ],
+    "교육/학습": [
+      "learning",
+      "학습"
+    ],
+    "주거/통신": [
+      "housing",
+      "주거"
+    ],
+    "금융": [
+      "etc",
+      "기타"
+    ],
+    "반려동물": [
+      "etc",
+      "기타"
+    ],
+    "*": [
+      "etc",
+      "기타"
+    ],
+    "이체": [
+      "relationship",
+      "관계"
+    ]
+  },
+  "sub": {
+    "온라인쇼핑/서비스구독": [
+      "subscription",
+      "구독"
+    ],
+    "금융/세금/과태료": [
+      "tax",
+      "세금"
+    ],
+    "금융/은행": [
+      "relationship",
+      "관계"
+    ]
+  },
+  "group": {
+    "식비": "식비",
+    "카페/간식": "식비",
+    "술/유흥": "식비",
+    "온라인쇼핑": "쇼핑",
+    "패션/쇼핑": "쇼핑",
+    "뷰티/미용": "쇼핑",
+    "교통": "교통",
+    "자동차": "교통"
+  },
+  "sub_group": {
+    "온라인쇼핑/서비스구독": "구독",
+    "금융/은행": "사람에게 보낸 돈",
+    "이체/미분류": "사람에게 보낸 돈"
+  },
+  "default_group": "생활·기타"
+}

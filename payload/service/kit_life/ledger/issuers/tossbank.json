@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "issuer": "tossbank",
+  "display_ko": "토스뱅크카드",
+  "method_stems": [
+    "토스"
+  ],
+  "guide": {
+    "sms_available": {
+      "value": false,
+      "status": "unverified",
+      "verified_at": null,
+      "source": [
+        "https://www.clien.net/service/board/park/17604517",
+        "https://support.toss.im/faq/5315"
+      ],
+      "note": "사용자 글(\"토스뱅크 체크카드 승인내역은 문자로는 못 받는군요\")과 토스 고객센터 FAQ 제목만 확인. 공식 본문은 읽지 못했다. 문자가 없으면 이 카드는 주간 정리로 챙긴다."
+    },
+    "menu_path": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "fee": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "alt_route": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "sender_numbers": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    }
+  },
+  "sms": {
+    "markers": [
+      "토스뱅크"
+    ],
+    "markers_basis": "assumed",
+    "templates": []
+  }
+}

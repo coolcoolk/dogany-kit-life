@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "issuer": "shinhancard",
+  "display_ko": "신한카드",
+  "method_stems": [
+    "신한"
+  ],
+  "guide": {
+    "sms_available": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "menu_path": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "fee": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "alt_route": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "sender_numbers": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    }
+  },
+  "sms": {
+    "markers": [
+      "신한카드",
+      "신한\\d{4}"
+    ],
+    "markers_basis": "assumed",
+    "templates": []
+  }
+}

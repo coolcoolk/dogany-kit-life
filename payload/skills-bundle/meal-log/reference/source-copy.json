@@ -1,0 +1,24 @@
+{
+  "ko": {
+    "source_ask": "어디서 드신 음식인가요?",
+    "sources": {
+      "restaurant": "식당/배달",
+      "product": "포장 제품",
+      "homemade": "집에서 만듦"
+    },
+    "confirm": "{food}, {source} 음식이 맞나요?",
+    "photo_ask": "{meal} {food}이요. 사진 한 장 보내 주시면 고명까지 보고 더 정확하게 기록할게요.",
+    "photo_skip": "사진 없이 기록"
+  },
+  "en": {
+    "source_ask": "Where did the food come from?",
+    "sources": {
+      "restaurant": "Restaurant/delivery",
+      "product": "Packaged product",
+      "homemade": "Homemade"
+    },
+    "confirm": "Was {food} from {source}?",
+    "photo_ask": "{meal}: {food}. Send a photo and I can record the toppings more accurately.",
+    "photo_skip": "Record without photo"
+  }
+}

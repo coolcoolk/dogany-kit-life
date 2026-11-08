@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+"""review -- pending ledger items as ONE owner-facing table, ONE answer.
+
+  review show [--lane daily|weekly] [--json]   numbered Korean table + digest line
+  review apply [--lane daily|weekly] --expect DIGEST [--exclude 2,5] [--defer 3] [--new 4]
+               [--business 6] [--personal 7] [--attach 8=s<spend id>] [--reversal 9=s<spend id>]
+               [--what '2=<name>:<category>' --what '3=<name>'] [--today D]
+
+`show` prints the table for the owner and, on the last line, `DIGEST <hex>`
+(for the caller, not the owner). `apply` refuses when the pending list changed
+since that digest. Lane daily = card-SMS items only; weekly (default) =
+everything pending. Callers: ledger-session (retro lane, daily and weekly).
+--what answers the grouped payment-intermediary block (name -> the spend's
+note, category -> its category; category optional), repeatable. --today
+pins the weekly lane's 7-day window (the same date retro-section used).
+"""
+import argparse, datetime, json, os, sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import kit, opaque, review, settlement
+
+def nums(s):
+    return {int(x) for x in s.split(',') if x.strip()} if s else set()
+
+def pairs(s, reversal=False):
+    out = {}
+    for part in (s or '').split(','):
+        if part.strip():
+            k, _, v = part.partition('=')
+            v = v.strip()
+            # G4: payment attachment accepts the spend id directly. A reversal
+            # still needs its original landing block as --reversal-of.
+            if reversal:
+                out[int(k)] = kit.block_for_spend(v[1:]) if v.startswith('s') else int(v)
+            else:
+                out[int(k)] = ('spend', int(v[1:])) if v.startswith('s') else ('block', int(v))
+    return out
+
+ap = argparse.ArgumentParser(prog='review')
+ap.add_argument('command', choices=('show', 'apply'))
+ap.add_argument('--json', action='store_true')
+ap.add_argument('--expect')
+ap.add_argument('--lane', default='weekly', choices=('daily', 'weekly'))
+for f in ('exclude', 'defer', 'new', 'business', 'personal', 'attach', 'reversal'):
+    ap.add_argument('--' + f)
+ap.add_argument('--what', action='append')
+ap.add_argument('--today')
+a = ap.parse_args()
+try:
+    today = datetime.date.fromisoformat(a.today) if a.today else None
+    if a.command == 'show':
+        plan = review.build(a.lane, today=today)
+        if a.json:
+            print(json.dumps(plan, ensure_ascii=False, sort_keys=True))
+        else:
+            print(review.render(plan))
+            print('DIGEST\t' + plan['digest'])
+    else:
+        if not a.expect:
+            ap.error('--expect DIGEST required')
+        res = review.apply(a.expect, exclude=nums(a.exclude), defer=nums(a.defer), new=nums(a.new),
+                           business=nums(a.business), personal=nums(a.personal),
+                           attach=pairs(a.attach), reversal=pairs(a.reversal, reversal=True), lane=a.lane,
+                           what=opaque.parse_answers(a.what), today=today)
+        end = today or datetime.date.today()
+        start = end - datetime.timedelta(days=7)
+        cards = settlement.sweep(start,end)
+        cards += [settlement.render_match(m) for m in settlement.call('pending-transfers')]
+        out = {'results': res}
+        if cards:
+            out['settlement'] = cards
+        print(json.dumps(out, ensure_ascii=False))
+except (ValueError, kit.KitError) as e:
+    print(json.dumps({'error': str(e)}, ensure_ascii=False))
+    sys.exit(2)

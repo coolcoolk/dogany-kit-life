@@ -1,0 +1,27 @@
+{
+  "_doc": "Tiered / usage subscriptions for ledger_profile.py (owner answer 2026-10-10 19:38: Claude Pro / Max 5x / Max 20x switching plus API usage under one merchant). One service = one merchant key (ledger_profile.merchant_key). A charge is a PLAN charge when its KRW amount sits in a tier band [lo, hi] and, when plan_words is set, its descriptor (letters only, casefolded) carries one of them; every other charge of the merchant is USAGE (regular spending under usage_name). Bands are KRW including VAT: krw = usd x (1 + vat) x fx, lo / hi = krw x (1 -/+ tolerance), rounded to 100 won. Generic: add a service with its own table; code reads only key, name, usage_name, plan_words, tiers[].tier/lo/hi.",
+  "services": [
+    {
+      "key": "anthropic",
+      "name": "Claude 구독",
+      "name_en": "Claude subscription",
+      "usage_name": "Claude API 사용료",
+      "usage_name_en": "Claude API usage",
+      "plan_words": ["claudeai", "claudesub", "subscription"],
+      "source": {
+        "checked": "2026-10-10",
+        "urls": ["https://claude.com/pricing", "https://support.claude.com/en/articles/11049744-how-much-does-the-max-plan-cost"],
+        "prices_usd_month": {"Pro": 20, "Max 5x": 100, "Max 20x": 200},
+        "verified": "USD list prices verified 2026-10-10 (Pro $20 billed monthly; Max 5x $100, Max 20x $200; 'prices shown do not include applicable tax'). UNVERIFIED: the 10 % VAT on Korean consumer billing and the FX rate -- inferred from the owner's own card charges (Pro 32,612-33,466 won; Max 5x 159,862-166,012 won; Max 20x 288,960-311,380 won, 2025-12..2026-08 = 1,310-1,510 won per USD incl. 10 % VAT).",
+        "vat": 0.10,
+        "fx_krw_per_usd": 1450,
+        "tolerance": 0.15
+      },
+      "tiers": [
+        {"tier": "Pro", "usd": 20, "krw": 31900, "lo": 27100, "hi": 36700},
+        {"tier": "Max 5x", "usd": 100, "krw": 159500, "lo": 135600, "hi": 183400},
+        {"tier": "Max 20x", "usd": 200, "krw": 319000, "lo": 271200, "hi": 366900}
+      ]
+    }
+  ]
+}

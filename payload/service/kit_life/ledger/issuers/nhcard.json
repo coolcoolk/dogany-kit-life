@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "issuer": "nhcard",
+  "display_ko": "NH농협카드",
+  "method_stems": [
+    "NH",
+    "농협"
+  ],
+  "guide": {
+    "sms_available": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "menu_path": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "fee": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "alt_route": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "sender_numbers": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    }
+  },
+  "sms": {
+    "markers": [
+      "NH농협",
+      "농협카드"
+    ],
+    "markers_basis": "assumed",
+    "templates": []
+  }
+}

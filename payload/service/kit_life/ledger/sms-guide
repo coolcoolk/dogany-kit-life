@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""sms-guide -- the per-card automation how-to (Korean), rendered from the
+issuer data. Also the verification check and the sender answer.
+
+  sms-guide show <issuer>[,<issuer>...]   the guide text (instructions)
+  sms-guide check [--today D] [--mark]    lines to tell the owner about the
+                                          automation: first SMS arrived ("it is
+                                          coming in fine"), a first-seen sender
+                                          ("register this number?"), update the
+                                          app, what to fix, or a nudge.
+                                          JSON {"lines":[...], "senders":[...]};
+                                          --mark records them as said (each
+                                          line is said once)
+  sms-guide sender-confirm SENDER yes|no [--receiver-db FILE] [--today D]
+                                          the owner's one answer to "register this
+                                          number?" (register = yes, do-not-register = no).
+                                          SENDER as shown in the question; any
+                                          spelling of the same number works.
+                                          yes registers it and ingests its held
+                                          SMS; no refuses it for good and drops
+                                          them
+  sms-guide table                         issuer data as a verified/unverified
+                                          table (maintainers)
+"""
+import argparse, datetime, json, os, sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import automation, collector, guide, issuers, kit, receiver
+
+ap = argparse.ArgumentParser(prog='sms-guide')
+ap.add_argument('command', choices=('show', 'check', 'sender-confirm', 'table'))
+ap.add_argument('issuers', nargs='?', default='')
+ap.add_argument('answer', nargs='?', default='')
+ap.add_argument('--today')
+ap.add_argument('--mark', action='store_true')
+ap.add_argument('--receiver-db')
+a = ap.parse_args()
+docs = issuers.load_all()
+if a.command == 'show':
+    keys = [k for k in a.issuers.split(',') if k]
+    bad = [k for k in keys if k not in docs]
+    if not keys or bad:
+        print(json.dumps({'error': 'unknown issuer %s' % bad}, ensure_ascii=False))
+        sys.exit(2)
+    print(guide.render(keys, docs=docs))
+elif a.command == 'check':
+    today = datetime.date.fromisoformat(a.today) if a.today else datetime.date.today()
+    lines = automation.lines(today, names={k: d['display_ko'] for k, d in docs.items()}, docs=docs)
+    if a.mark and lines:
+        automation.mark_announced([k for k, _ in lines])
+    print(json.dumps({'lines': [t for _, t in lines],
+                      'senders': [k.split(':', 1)[1] for k, _ in lines if k.startswith('sender:')]},
+                     ensure_ascii=False))
+elif a.command == 'sender-confirm':
+    if not a.issuers.strip() or a.answer not in ('yes', 'no'):
+        print(json.dumps({'error': 'sender-confirm needs SENDER and yes|no'}, ensure_ascii=False))
+        sys.exit(2)
+    today = datetime.date.fromisoformat(a.today) if a.today else None
+    try:
+        out = collector.decide_sender(a.issuers, a.answer == 'yes', today=today, docs=docs, db=a.receiver_db)
+    except (ValueError, kit.KitError, receiver.ReceiverMissing) as e:
+        print(json.dumps({'error': str(e)}, ensure_ascii=False))
+        sys.exit(2)
+    print(json.dumps(out, ensure_ascii=False, sort_keys=True))
+else:
+    for k, d in docs.items():
+        for f in issuers.GUIDE_FIELDS:
+            r = d['guide'][f]
+            print('\t'.join([d['display_ko'], f, r['status'], json.dumps(r['value'], ensure_ascii=False),
+                             ' '.join(r['source'])]))
