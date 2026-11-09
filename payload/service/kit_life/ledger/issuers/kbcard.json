@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "issuer": "kbcard",
+  "display_ko": "KB국민카드",
+  "method_stems": [
+    "KB",
+    "국민"
+  ],
+  "guide": {
+    "sms_available": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "menu_path": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "fee": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "alt_route": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "sender_numbers": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    }
+  },
+  "sms": {
+    "markers": [
+      "KB국민",
+      "국민카드"
+    ],
+    "markers_basis": "assumed",
+    "templates": []
+  }
+}

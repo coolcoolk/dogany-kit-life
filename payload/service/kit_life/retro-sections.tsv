@@ -1,0 +1,18 @@
+# retro-sections registry (database/retro_sections.py): <module>\t<command>
+# Axis state (축 상태): weekly lane only, lapsed axes only, at most 3 lines,
+# no decision. Silent (exit 3) on the daily lane and on a week with nothing
+# lapsed. Resolvers: database/axis_state.py; rows: axis.conf.
+module_core	axis-lapsed
+# module_ledger (kit_life 2.46.0; pack_ledger shipped this row in its own
+# service/ledger/retro-sections.tsv): the pending card-SMS / screenshot / CSV
+# review table, daily (automated path only) and weekly (sweep + all). --poll
+# runs the SMS collector first, fail-open. Main agent only (--role domain
+# drops kit rows).
+module_ledger	ledger/retro-section --poll --no-mark
+# plan-waiting (kit_life, owner 2026-10-12): ONE line when an open plan
+# project (a gift in flight, an order awaited) has a waiting step with no
+# movement for 3+ days. Daily retro + morning brief; silent otherwise.
+module_core	plan-waiting	daily,morning
+
+# Regimen miss check; module_health scope owns it on both base and domain kits.
+module_health	regimen-retro	daily	40

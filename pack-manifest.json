@@ -1,0 +1,262 @@
+{
+  "id": "kit_life",
+  "name_en": "Lifekit",
+  "name_ko": "라이프킷",
+  "kind": "kit",
+  "provides_kit": "kit_life",
+  "base_units": {
+    "primary_unit": "timeblock",
+    "resource_units": [
+      {
+        "key": "time",
+        "unit": "timeblock",
+        "table": "timeblock"
+      },
+      {
+        "key": "place",
+        "unit": "place",
+        "table": "place"
+      },
+      {
+        "key": "person",
+        "unit": "person",
+        "table": "persons"
+      },
+      {
+        "key": "money",
+        "unit": "entry",
+        "table": "spend_entry"
+      },
+      {
+        "key": "body",
+        "unit": "metric",
+        "table": "metric_log"
+      }
+    ]
+  },
+  "modules": [
+    "module_meal",
+    "module_episode",
+    "module_person",
+    "module_goal",
+    "module_routine",
+    "module_workout",
+    "module_health",
+    "module_schedule",
+    "module_place",
+    "module_brief",
+    "module_core",
+    "module_ledger",
+    "module_shopping",
+    "module_dining",
+    "module_outing",
+    "module_admin",
+    "module_work",
+    "module_transport",
+    "module_invest",
+    "module_business"
+  ],
+  "module_versions": {
+    "module_meal": "0.2.18",
+    "module_episode": "0.2.3",
+    "module_person": "0.3.3",
+    "module_goal": "0.2.10",
+    "module_routine": "0.2.13",
+    "module_workout": "0.1.7",
+    "module_health": "0.2.6",
+    "module_schedule": "0.2.37",
+    "module_place": "0.2.10",
+    "module_brief": "0.2.23",
+    "module_core": "0.2.19",
+    "module_ledger": "0.7.23",
+    "module_shopping": "0.2.9",
+    "module_dining": "0.1.3",
+    "module_outing": "0.2.2",
+    "module_admin": "0.1.0",
+    "module_work": "0.1.0",
+    "module_transport": "0.1.0",
+    "module_invest": "0.1.0",
+    "module_business": "0.1.0"
+  },
+  "skills": [
+    {
+      "name": "photo-link",
+      "sharing_mode": "own",
+      "module": "module_core"
+    },
+    {
+      "name": "episode-setup",
+      "sharing_mode": "own",
+      "module": "module_episode"
+    },
+    {
+      "name": "episode-session",
+      "sharing_mode": "own",
+      "module": "module_episode"
+    },
+    {
+      "name": "episode-log",
+      "sharing_mode": "own",
+      "module": "module_episode"
+    },
+    {
+      "name": "meal-log",
+      "sharing_mode": "own",
+      "module": "module_meal"
+    },
+    {
+      "name": "brief-session",
+      "sharing_mode": "own",
+      "module": "module_brief"
+    },
+    {
+      "name": "place-view",
+      "sharing_mode": "own",
+      "module": "module_place"
+    },
+    {
+      "name": "schedule-log",
+      "sharing_mode": "own",
+      "module": "module_schedule"
+    },
+    {
+      "name": "place-manage",
+      "sharing_mode": "own",
+      "module": "module_place"
+    },
+    {
+      "name": "routine-manage",
+      "sharing_mode": "own",
+      "module": "module_routine"
+    },
+    {
+      "name": "ledger-view",
+      "sharing_mode": "own",
+      "module": "module_ledger"
+    },
+    {
+      "name": "ledger-log",
+      "sharing_mode": "own",
+      "module": "module_ledger"
+    },
+    {
+      "name": "ledger-session",
+      "sharing_mode": "own",
+      "module": "module_ledger"
+    },
+    {
+      "name": "ledger-setup",
+      "sharing_mode": "own",
+      "module": "module_ledger"
+    },
+    {
+      "name": "person-manage",
+      "sharing_mode": "own",
+      "module": "module_person"
+    },
+    {
+      "name": "person-session",
+      "sharing_mode": "own",
+      "module": "module_person"
+    },
+    {
+      "name": "goal-session",
+      "sharing_mode": "own",
+      "module": "module_goal"
+    },
+    {
+      "name": "core-setup",
+      "sharing_mode": "own",
+      "module": "module_core"
+    },
+    {
+      "name": "core-log",
+      "sharing_mode": "own",
+      "module": "module_core"
+    },
+    {
+      "name": "brief-setup",
+      "sharing_mode": "own",
+      "module": "module_brief"
+    },
+    {
+      "name": "health-log",
+      "sharing_mode": "own",
+      "module": "module_health"
+    },
+    {
+      "name": "workout-log",
+      "sharing_mode": "own",
+      "module": "module_workout"
+    },
+    {
+      "name": "shopping-session",
+      "sharing_mode": "own",
+      "module": "module_shopping"
+    },
+    {
+      "name": "shopping-log",
+      "sharing_mode": "own",
+      "module": "module_shopping"
+    },
+    {
+      "name": "dining-session",
+      "sharing_mode": "own",
+      "module": "module_dining"
+    },
+    {
+      "name": "outing-session",
+      "sharing_mode": "own",
+      "module": "module_outing"
+    }
+  ],
+  "handover_brief_verb": "handover-brief",
+  "vocab_verb": "vocab",
+  "pack_version": "2.46.2",
+  "contract_version": 1,
+  "expected_user_version": 117,
+  "requires_framework": ">=2.7.0",
+  "payload_root": "payload",
+  "post_install": [
+    "routines/bundle/satiety-import.sh",
+    "routines/bundle/post-install-carry.sh"
+  ],
+  "hooks": [
+    {
+      "event": "SessionStart",
+      "script": "routines/bundle/ledger-session-start.py"
+    },
+    {
+      "event": "UserPromptSubmit",
+      "script": "routines/bundle/start-tap-context.py"
+    },
+    {
+      "event": "UserPromptSubmit",
+      "script": "routines/bundle/weekly-start-stamp.py"
+    },
+    {
+      "event": "UserPromptSubmit",
+      "script": "routines/bundle/photo-turn-gate.py",
+      "timeout": 30
+    },
+    {
+      "event": "UserPromptSubmit",
+      "script": "routines/bundle/ingest-link-context.py",
+      "timeout": 10
+    },
+    {
+      "event": "UserPromptSubmit",
+      "script": "routines/bundle/contract-context.py"
+    }
+  ],
+  "deploy_owner": "skull",
+  "status": "published",
+  "terms": "config/terms.json",
+  "record_providers": {
+    "types": [
+      "photo_note",
+      "photo_results_sent"
+    ],
+    "executable": "database/record_provider.py"
+  }
+}

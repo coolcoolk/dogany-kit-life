@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "markers": [
+    {
+      "marker": "달러박스", "bank": "카카오뱅크",
+      "pattern": "(?<![가-힣A-Za-z])달러\\s*박스(?![가-힣A-Za-z])",
+      "kinds": ["income", "transfer"], "classes": ["own_transfer", "saving", "saving_back"],
+      "source": "https://event.kakaobank.com/p/dollarbox2",
+      "basis": "Product terms require a KakaoBank demand deposit account and connect Dollar Box to that account.",
+      "checked": "2026-10-26"
+    },
+    {
+      "marker": "저금통", "bank": "카카오뱅크",
+      "pattern": "(?<![가-힣A-Za-z])저금통(?![가-힣A-Za-z])",
+      "kinds": ["transfer"], "classes": ["own_transfer", "saving", "saving_back"],
+      "source": "https://www.kakaobank.com/products/coinbox",
+      "basis": "KakaoBank Piggybank can only be opened linked to a KakaoBank demand deposit account. A retail purchase mentioning a piggy bank is not this product.",
+      "checked": "2026-10-26"
+    },
+    {
+      "marker": "세이프박스", "bank": "카카오뱅크",
+      "pattern": "(?<![가-힣A-Za-z])세이프\\s*박스(?![가-힣A-Za-z])",
+      "kinds": ["transfer"], "classes": ["own_transfer", "saving", "saving_back"],
+      "source": "https://www.kakaobank.com/products/safeboxes",
+      "basis": "Safe Box is attached to a KakaoBank account; product transfers identify the linked account.",
+      "checked": "2026-10-26"
+    }
+  ],
+  "interest_cadences": [
+    {
+      "bank": "카카오뱅크", "weekday": 5, "day_min": 23, "day_max": 29,
+      "min_months": 3, "strength": "suggestion",
+      "source": "https://www.kakaobank.com/Corp/News/Notices/view/20003",
+      "basis": "Monthly interest is settled on the fourth Friday and paid the following day. Timing overlaps other banks and never proves identity alone.",
+      "checked": "2026-10-26"
+    }
+  ],
+  "banks": {
+    "ibk": "IBK", "toss": "토스뱅크", "kb": "KB국민은행", "shinhan": "신한은행",
+    "woori": "우리은행", "hana": "하나은행", "nh": "NH농협은행", "kakao": "카카오뱅크", "sc": "SC제일은행"
+  }
+}

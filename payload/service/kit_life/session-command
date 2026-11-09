@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+"""Kit command service seat. Installation must provide session_kit_binding.
+
+The binding authenticates transport identity and supplies the pinned pack's pure
+calculators/capability verifier; no fallback to legacy writers is available.
+"""
+import sys
+sys.dont_write_bytecode=True
+import argparse
+import json
+import importlib.util
+from pathlib import Path
+import sqlite3
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'database'))
+from session_command import CommandError, ServiceConnection, apply
+from session_v2_contract.commands import CommandEnvelope
+from session_program import command as program_command
+from session_delivery import decode as decode_program_command
+from session_v2_contract.transport import CallbackAcknowledgement
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('operation',choices=['apply','tap','delivery','config-install'])
+    parser.add_argument('--json',dest='envelope',help='JSON envelope; tap may also read JSON from stdin')
+    parser.add_argument('--manifest',help='Installed root-relative session manifest (config-install only)')
+    parser.add_argument('--rotate',action='store_true',help='Rotate the private service key (config-install only)')
+    parser.add_argument('--describe',action='store_true',help='Print unsigned configuration inputs without writing (config-install only)')
+    args=parser.parse_args()
+    if args.operation == 'config-install':
+        from session_kit_binding.config_install import main as install_config
+        if args.envelope is not None:
+            parser.error('config-install reads attestation only from stdin')
+        return install_config(args.manifest, rotate=args.rotate, describe=args.describe)
+    if args.manifest is not None or args.rotate or args.describe:
+        parser.error('--manifest, --rotate and --describe require config-install')
+    try:
+        try:
+            # Load the kit's own binding even when the pack's regular v2
+            # package precedes this service directory on PYTHONPATH.
+            binding_path=Path(__file__).resolve().parents[2]/'database/session_kit_binding/__init__.py'
+            spec=importlib.util.spec_from_file_location('_kit_writer_binding',binding_path)
+            binding=importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(binding)
+            authenticated_writer=binding.authenticated_writer
+            authenticated_callback=binding.authenticated_callback
+        except (ImportError,FileNotFoundError) as error:
+            raise CommandError('RUNTIME_UNAVAILABLE','installed session_kit_binding is required') from error
+        if args.operation == 'delivery':
+            from session_delivery import DeliveryError, DeliveryStore, decode
+            try:
+                raw = args.envelope if args.envelope is not None else sys.stdin.read()
+                request = decode(raw)
+                # Validate the outer shape before installation/export lookups.
+                from session_delivery import fields, need, FIELDS, SCHEMA
+                fields(request, 'schema operation args auth')
+                need(request['schema'] == SCHEMA and request['operation'] in FIELDS)
+                need(type(request['args']) is dict)
+                authority, db_path = binding.authenticated_delivery(request)
+                conn = sqlite3.connect(db_path)
+                try:
+                    result, status = DeliveryStore(conn, authority).dispatch(request)
+                finally:
+                    conn.close()
+            except (DeliveryError, ValueError, KeyError, TypeError, sqlite3.Error, OSError) as error:
+                code = error.code if isinstance(error, DeliveryError) else 'STORAGE_FAILED' if isinstance(error, (sqlite3.Error, OSError)) else 'INVALID_SCHEMA'
+                result = dict(ok=False, error=dict(code=code, retryable=code == 'STORAGE_FAILED'))
+                status = 2 if code == 'INVALID_SCHEMA' else 40 if code == 'STORAGE_FAILED' else 4
+            print(json.dumps(result, ensure_ascii=False, separators=(',', ':'), allow_nan=False))
+            return status
+        # Binding returns a pre-authenticated seat and exact DB path. Neither
+        # caller-selected DB paths nor model-supplied actor claims authorize it.
+        if args.operation=='tap':
+            raw=args.envelope if args.envelope is not None else sys.stdin.read()
+            command=CommandEnvelope.from_json(raw)
+            writer,db_path,command=authenticated_callback(raw)
+            command=CommandEnvelope(dict(command))
+        else:
+            if args.envelope is None:
+                raise CommandError('INVALID','apply requires --json')
+            command=program_command(decode_program_command(args.envelope))
+            writer,db_path=authenticated_writer(command)
+        with sqlite3.connect(db_path,factory=ServiceConnection) as conn:
+            conn.session_writer=writer
+            context = writer.runtime.delivery_context(command)
+            if context:
+                # Authenticate expiry, role, source and the pinned session
+                # before persisting an invocation marker. Writer repeats the
+                # check inside its domain transaction to close the race.
+                from session_command import snapshot
+                writer.runtime.conn = conn
+                writer.runtime.authorize(dict(command), snapshot(conn, command['session_id']))
+                from session_delivery import prepare_invocation
+                if not writer.runtime.principal.get('attempt'):
+                    writer.runtime.principal['attempt'] = prepare_invocation(conn, command, *context)
+                invocation_started = True
+            receipt=apply(conn,command)
+            current_revision=conn.execute('SELECT revision FROM workouts WHERE id=?',(command['session_id'],)).fetchone()[0]
+        conn.close()
+        if args.operation=='tap':
+            print(CallbackAcknowledgement(dict(schema=2,session_id=command['session_id'],status='DELIVERY_PENDING',receipt=receipt.to_dict(),current_revision=current_revision,diagnostic_key=None,model_fallback=False)).to_json())
+        else:
+            print(receipt.to_json())
+        return 0
+    except (ValueError,sqlite3.Error,OSError,KeyError,TypeError) as error:
+        if args.operation in ('tap', 'apply') and 'command' in locals():
+            code=getattr(error,'code','INVALID')
+            revision=0
+            if code=='MOVED' and 'conn' in locals():
+                current=conn.execute('SELECT revision FROM workouts WHERE id=?',(command['session_id'],)).fetchone()
+                revision=current[0] if current else 0
+            status='MOVED' if code in ('MOVED','STALE_REVISION','SURFACE_MOVED') else 'UNAVAILABLE' if code in ('CONFIG','CAPABILITY','ARTIFACT','RUNTIME_UNAVAILABLE','SURFACE_PENDING') else 'INVALID'
+            acknowledgement = dict(schema=2,session_id=command['session_id'],status=status,
+                receipt=None,current_revision=revision,diagnostic_key=code,model_fallback=False)
+            if isinstance(error, CommandError) and code not in ('SURFACE_PENDING', 'RUNTIME_UNAVAILABLE', 'FENCE_STALE', 'CAPABILITY') and 'invocation_started' in locals() and invocation_started:
+                from session_delivery import record_rejection
+                recovery = sqlite3.connect(db_path)
+                try:
+                    record_rejection(recovery, command, acknowledgement, *context, attempt=writer.runtime.principal.get('attempt'))
+                finally:
+                    recovery.close()
+            if args.operation == 'tap':
+                print(CallbackAcknowledgement(acknowledgement).to_json())
+                return 0
+        print(json.dumps({'status':getattr(error,'code','INVALID'),'detail':str(error),'model_fallback':False}),file=sys.stderr)
+        return 2
+
+if __name__=='__main__':raise SystemExit(main())

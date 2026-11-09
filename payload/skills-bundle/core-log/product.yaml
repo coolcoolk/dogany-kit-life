@@ -1,0 +1,13 @@
+id: core-log
+type: module
+visibility: public
+status: official
+version: 0.2.19
+module: module_core
+owns:
+  - "agents/.template/.claude/skills-bundle/core-log/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-agent
+# Always-on capture entry (record-always-on P1): routes every stated fact to
+# a module adapter in reference/ that reuses the module's own verbs.
