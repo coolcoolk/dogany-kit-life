@@ -1,0 +1,11 @@
+id: shopping-log
+type: module
+visibility: private
+status: poc
+version: 0.2.10
+module: module_shopping
+owns:
+  - "agents/.template/.claude/skills-bundle/shopping-log/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: none

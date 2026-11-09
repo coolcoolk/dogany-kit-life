@@ -1,0 +1,13 @@
+{
+  "source": "healthkit",
+  "kinds": [
+    "sleep",
+    "workout",
+    "steps",
+    "heart_rate",
+    "resting_heart_rate"
+  ],
+  "reference": "service/kit_life/ingest-link.md",
+  "consent_command": "database/kit_life.sh ingest-consent healthkit {kind} --module health",
+  "pack_consent_command": "service/health/hk-ingest consent {kinds}"
+}

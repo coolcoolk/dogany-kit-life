@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""plan-waiting -- the kit's retro / morning-brief provider for in-flight plans.
+
+Registered in service/kit_life/retro-sections.tsv (lanes daily,morning);
+invoked by database/retro_sections.py as
+
+    plan-waiting [--db PATH] [--today YYYY-MM-DD] --lane daily|morning --mode line|section
+
+Daily line mode emits structured identities for every stale waiting step,
+using the step updated_at local-date clock and KIT_RETRO_TASK_SCOPE.
+Other modes print ONE plain question for the stalest open WAITING step of a
+plan project that has not moved for 3+ days (database/kit_life.py
+plan_waiting_line). Exit 3 = nothing to show: no database, no plan, nothing
+stale. Opens the database read-only (the provider contract: it reports, it
+never writes).
+"""
+import argparse
+import datetime
+import os
+import sqlite3
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATABASE_DIR = os.path.join(os.path.dirname(os.path.dirname(HERE)), 'database')
+NOTHING = 3
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog='plan-waiting')
+    ap.add_argument('--lane', choices=('daily', 'weekly', 'morning'),
+                    required=True)
+    ap.add_argument('--mode', choices=('line', 'section'), default='line')
+    ap.add_argument('--db', default=None)
+    ap.add_argument('--today', default=None)
+    a = ap.parse_args(argv)
+
+    sys.path.insert(0, DATABASE_DIR)
+    import kit_life  # noqa: E402
+    import ro_open  # noqa: E402
+
+    db = a.db or os.path.join(DATABASE_DIR, 'kit_life.db')
+    if not os.path.isfile(db):
+        return NOTHING
+    now = None
+    if a.today:
+        now = '%sT00:00:00Z' % a.today
+    conn = ro_open.open_ro(db)
+    try:
+        if a.lane == 'daily' and a.mode == 'line':
+            import json
+            items = kit_life.plan_waiting_items(conn, today=a.today or os.environ.get('KIT_RETRO_TODAY'),
+                                               owning_agent=os.environ.get('KIT_RETRO_TASK_SCOPE') or None)
+            if not items:
+                return NOTHING
+            print(json.dumps({'items': items}, ensure_ascii=False))
+            return 0
+        line = kit_life.plan_waiting_line(conn, now=now)
+    except sqlite3.Error as exc:
+        print('[plan-waiting] skipped: %s' % exc, file=sys.stderr)
+        return NOTHING
+    finally:
+        conn.close()
+    if not line:
+        return NOTHING
+    print(line)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

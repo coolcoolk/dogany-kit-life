@@ -1,0 +1,24 @@
+# body_food_token.seed.tsv -- the FROZEN body-token seed (DGN-2120 design v2
+# §4.1 "contains tokens come from the frozen body-token seed"; requirements
+# E3 body_food_token). Kit core, not a module: body facts sit next to persons.
+# Read by database/food_pref.py: every `contains` token food-kind prints must
+# be one of these rows. FROZEN: a new token comes only through the owner-yes
+# `body-token-add` path (framework/kit, later) -- never by editing this list.
+#
+# Format: <token> TAB <label>
+peanut	땅콩
+tree_nut	견과류
+shellfish	조개류
+crustacean	갑각류
+fish	생선
+seafood	해산물
+dairy	유제품
+egg	달걀
+wheat_gluten	밀
+soy	대두
+buckwheat	메밀
+sesame	참깨
+pork	돼지고기
+beef	소고기
+alcohol	술
+caffeine	카페인

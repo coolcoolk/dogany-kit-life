@@ -1,0 +1,6 @@
+{
+  "_doc": "Instance-provided subscription tier facts. Each service supplies its merchant key, display names, optional plan_words and tiers (tier, lo, hi).",
+  "services": [],
+  "fx_krw_per_usd": 1450,
+  "fx_note": "Existing ledger estimate, retained for comparable owner USD caps; not a live quote."
+}

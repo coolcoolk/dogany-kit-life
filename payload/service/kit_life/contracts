@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+"""Contract/warranty owner flow. Relay the returned HTML and button rows.
+
+contracts capture --data JSON | contracts dispatch --data '{"token":"..."}'
+Uses the instance's pinned kit command; never owns database SQL or sends.
+"""
+import os
+from pathlib import Path
+import subprocess
+import sys
+sys.dont_write_bytecode = True
+root = Path(os.environ.get('DOGANY_INSTANCE_ROOT') or Path(__file__).absolute().parents[2])
+raise SystemExit(subprocess.call(['bash', str(root / 'database/kit_life.sh'), 'contract', *sys.argv[1:]]))

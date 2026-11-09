@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""Settlement conversation seam: JSON cards with one button per row.
+
+settlement <action> --data JSON [--plain]
+Actions: link/get/answer/no-split/transfer/transfer-answer/weekly/weekly-answer/
+         sweep/setting/notices/capture.
+Pass each button's action/data back verbatim. Chat amount replies use
+answer {spend_id, answer:amount, person:owner|person_id, amount:integer}.
+An ambiguous transfer accepts transfer-answer {answer:choose, share_id:...}.
+"""
+import argparse,json,os,sys
+sys.dont_write_bytecode=True
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import settlement as S,kit
+p=argparse.ArgumentParser(description=__doc__)
+p.add_argument('action');p.add_argument('--data',default='{}');p.add_argument('--plain',action='store_true')
+a=p.parse_args()
+try:
+    d=json.loads(a.data)
+    if a.action == 'dispatch':
+        a.action,d=S.dispatch_token(d['token'])
+    if a.action == 'weekly':
+        c=S.weekly(d['today']); out={'card':c}
+    elif a.action == 'sweep':
+        cs=S.sweep(d['since'],d['until']);out={'cards':cs};c=None
+    else:
+        data=S.call(a.action,**d);c=None
+        if a.action in ('link','get','answer'):
+            c=S.render(data)
+            out_matches=[S.render_match(m) for m in S.call('pending-transfers')]
+        elif a.action in ('transfer','transfer-answer'): c=S.render_match(data)
+        out={'data':data,'card':c}
+        if a.action in ('link','get','answer'): out['transfers']=out_matches
+        if a.action == 'capture': out['notice']=S.notice(data)
+    if a.plain:
+        print('\n\n'.join(S.plain(x) for x in out.get('cards',[c]) if x))
+    else: print(json.dumps(out,ensure_ascii=False))
+except (ValueError,KeyError,kit.KitError) as e:
+    print(json.dumps({'error':str(e)},ensure_ascii=False));sys.exit(2)

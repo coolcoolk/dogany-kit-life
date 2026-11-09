@@ -1,0 +1,65 @@
+# food_contains.tsv -- which body tokens a food-kind node physically contains
+# (DGN-2120 v2 §4.1 `contains`; requirements `dine_taste_contains`). Read by
+# database/food_pref.py only. Tokens must be in the frozen seed
+# (database/body_food_token.seed.tsv); the test pins that.
+#
+# A node's contains = its own rows + every ancestor's rows (seafood covers
+# raw_fish). certainty:
+#   primary   the dish is made of it (mala -> sesame is NOT that; pizza -> dairy is)
+#   possible  commonly in it, not always: the card says "확인 필요", never "safe"
+# A venue reads its signature kind at the certainty below and every other
+# kind on its page as `possible` (it may not be what you order).
+#
+# Format: <node> TAB <token> TAB primary|possible
+seafood	seafood	primary
+raw_fish	fish	primary
+shellfish	shellfish	primary
+sushi	fish	primary
+sushi	crustacean	possible
+sushi	shellfish	possible
+sushi	egg	possible
+pork_bbq	pork	primary
+galbi	beef	possible
+galbi	pork	possible
+meat_bbq	pork	possible
+meat_bbq	beef	possible
+suyuk	pork	primary
+yukhoe	beef	primary
+yukhoe	egg	possible
+gukbap	pork	possible
+gukbap	beef	possible
+katsu	wheat_gluten	primary
+katsu	pork	possible
+katsu	egg	possible
+ramen	wheat_gluten	primary
+ramen	pork	possible
+ramen	egg	possible
+udon	wheat_gluten	primary
+soba	buckwheat	primary
+soba	wheat_gluten	possible
+donburi	egg	possible
+jjajang	wheat_gluten	primary
+jjajang	soy	primary
+jjajang	pork	possible
+jjamppong	wheat_gluten	primary
+jjamppong	seafood	primary
+jjamppong	crustacean	possible
+jjamppong	shellfish	possible
+mala	sesame	possible
+mala	peanut	possible
+mala	soy	possible
+hotpot	beef	possible
+shabu	beef	possible
+pasta	wheat_gluten	primary
+pasta	dairy	possible
+pizza	wheat_gluten	primary
+pizza	dairy	primary
+steak	beef	primary
+hamburg	beef	primary
+hamburg	pork	possible
+hamburg	egg	possible
+omurice	egg	primary
+burger	wheat_gluten	primary
+burger	beef	possible
+pho	beef	possible
+pho	wheat_gluten	possible

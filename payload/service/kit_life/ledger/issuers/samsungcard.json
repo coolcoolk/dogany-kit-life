@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "issuer": "samsungcard",
+  "display_ko": "삼성카드",
+  "method_stems": [
+    "삼성"
+  ],
+  "guide": {
+    "sms_available": {
+      "value": true,
+      "status": "verified",
+      "verified_at": "2026-09-24",
+      "source": [
+        "https://www.samsungcard.com/personal/services/UHPPAS1800M0.jsp"
+      ],
+      "note": "공식 알림서비스 소개: 카카오톡 알림톡 또는 문자메시지로 수신 가능"
+    },
+    "menu_path": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": [
+        "https://extrememanual.net/38027"
+      ],
+      "note": "2021 블로그 기준 경로(메뉴 > 카드이용알림 > 바로알림 > 문자)는 현재 앱에서 확인하지 못했다. 가이드는 메뉴 이름을 지어내지 않고 찾을 말만 알려준다."
+    },
+    "fee": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": [
+        "https://www.samsungcard.com/personal/services/UHPPAS1800M0.jsp",
+        "https://extrememanual.net/38027"
+      ],
+      "note": "공식 페이지는 \"휴대폰알림 월 700원\", 2021 블로그는 \"바로알림 월 300원\" -- 상품 구분을 확인하지 못했다. 5만원 이상 결제 알림은 무료라는 안내는 두 곳 모두."
+    },
+    "alt_route": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "sender_numbers": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": [],
+      "note": "발신번호는 확인하지 못했다. 가이드는 오너 휴대폰에 이미 와 있는 이 카드사 문자의 보낸 사람을 그대로 고르게 한다."
+    }
+  },
+  "sms": {
+    "markers": [
+      "삼성카드",
+      "삼성\\d{4}(승인|취소)"
+    ],
+    "markers_basis": "assumed; unverified until the first real sample",
+    "templates": []
+  }
+}

@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+"""sms-stage -- the model lane for card SMS no template knows (today: every
+issuer except the Hyundai approval SMS).
+
+  sms-stage list                     unread queue (reference/issuer/date, no text)
+  sms-stage show  <ref>              SMS text for the model to read, from the
+                                     receiver store (card/account digit runs masked)
+  sms-stage stage <ref> --data J     re-verify the reading against the same
+                                     text, then stage it ALWAYS pending.
+                                     J: {"date","amount","merchant"
+                                     [,"operation":"payment|reversal","issuer","method"]}
+  sms-stage drop  <ref>              not a payment SMS (ad, bill notice); forget it
+  (--receiver-db FILE on show/stage: offline replay / tests)
+
+Re-verify = amount and merchant literally in the text, date within 7 days
+before the SMS arrived, issuer = the one named by the text (or, for a text no
+marker recognises, an automated card the model names). A failed check prints
+{"status":"rejected"} and stages nothing. Accepted model readings use the
+kit hold flag and remain pending for review under every auto-accept setting.
+"""
+import argparse, json, os, sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import collector, kit, receiver
+
+ap = argparse.ArgumentParser(prog='sms-stage')
+ap.add_argument('command', choices=('list', 'show', 'stage', 'drop'))
+ap.add_argument('ref', nargs='?')
+ap.add_argument('--data')
+ap.add_argument('--receiver-db')
+a = ap.parse_args()
+try:
+    if a.command == 'list':
+        out = sorted(collector.queue_load().values(), key=lambda r: r['ref'])
+    elif a.command == 'drop':
+        q = collector.queue_load()
+        out = {'status': 'dropped' if q.pop(a.ref, None) else 'absent'}
+        collector.queue_save(q)
+    else:
+        if not a.ref:
+            ap.error('ref required')
+        if a.command == 'show':
+            out = collector.show(a.ref, db=a.receiver_db)
+        else:
+            out = collector.stage_model(a.ref, json.loads(a.data or '{}'), db=a.receiver_db)
+except (ValueError, kit.KitError, receiver.ReceiverMissing) as e:
+    print(json.dumps({'error': str(e)}, ensure_ascii=False))
+    sys.exit(2)
+print(json.dumps(out, ensure_ascii=False, sort_keys=True))
