@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""sms-poll -- read the card SMS the owner's iPhone handed to the Dogany app
+from the transporter receiver's store (read-only) into the kit intake queue.
+Only SMS from senders the owner registered go in; a first-seen sender's SMS
+is held (event ids, no text) and asked about once.
+
+  sms-poll [--dry-run] [--quiet] [--receiver-db FILE] [--today YYYY-MM-DD]
+
+No enabled `sms:<issuer>` source = prints {"status":"off"} and exits 0 (the
+automation is optional and off until the module onboarding's yes). Receiver
+store missing or unreadable = fail-open: exit 0, counts logged to
+files/ledger/sms-poll.log, nothing staged (the next run continues from the
+cursor; re-reads are kit duplicates). Exit 2 only for a kit refusal.
+"""
+import argparse, datetime, json, os, sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import collector, kit, seed
+
+ap = argparse.ArgumentParser(prog='sms-poll')
+ap.add_argument('--dry-run', action='store_true')
+ap.add_argument('--quiet', action='store_true')
+ap.add_argument('--notifications-json', action='store_true', help='runtime delivery envelopes; no sender call')
+ap.add_argument('--notices', action='store_true', help='print immediate notices for the runtime sender')
+ap.add_argument('--receiver-db')
+ap.add_argument('--today')
+a = ap.parse_args()
+today = datetime.date.fromisoformat(a.today) if a.today else None
+try:
+    if not seed.enabled_sms_sources():
+        out = {'status': 'off'}
+    else:
+        out = collector.poll(today=today, dry_run=a.dry_run, db=a.receiver_db)
+except kit.KitError as e:
+    collector.log_line({'status': 'error', 'verb': e.verb, 'code': e.code})
+    print(json.dumps({'at': collector.timestamp(), 'error': str(e)}, ensure_ascii=False))
+    sys.exit(2)
+except Exception as e:  # receiver store missing / locked / unreadable: fail-open
+    out = {'status': 'error', 'error': type(e).__name__}
+    try:
+        collector.log_line(out)
+    except OSError:
+        pass
+if a.notifications_json:
+    from ledgerlib import settlement
+    print(json.dumps(settlement.notifications(out),ensure_ascii=False))
+if a.notices:
+    from ledgerlib import settlement
+    for item in out.get('items',[]):
+        if item.get('notice'): print(item['notice'])
+        for c in item.get('settlement',[]): print(settlement.plain(c))
+if not (a.notices or a.notifications_json) and (not a.quiet or out.get('status') == 'error'):
+    print(json.dumps({'at': collector.timestamp(), **out}, ensure_ascii=False, sort_keys=True))

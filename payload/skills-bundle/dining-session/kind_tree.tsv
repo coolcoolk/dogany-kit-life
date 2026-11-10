@@ -1,0 +1,58 @@
+# kind_tree.tsv -- the food-kind TREE over the kind tokens of kinds.tsv
+# (DGN-2120: preference scoping). Read by database/food_pref.py
+# (kit_life.sh food-kind / dining-history); venue_facts.py does not read it.
+#
+# A preference is held at a node and scoped down its subtree; the deeper node
+# wins (a like at spicy>mala survives a dislike at spicy). So every kind token
+# kinds.tsv can produce must sit here exactly once, under ONE parent: the
+# parent is the axis the owner's words group it by (mala is "spicy" before it
+# is "chinese"; the cuisine is carried separately in column 3).
+#
+# Format: <node> TAB <parent or -> TAB <cuisine node or -> TAB <label> TAB <category words or ->
+#   node      ascii token (= a kinds.tsv kind for dish/menu nodes)
+#   parent    the node above it; '-' = a root
+#   cuisine   the cuisine root this node belongs to ('-' = none by itself:
+#             a shabu dish says nothing about the cuisine, the venue's own
+#             category does)
+#   label     owner-facing word, the element of food-kind "path"
+#   words     comma list of place-page CATEGORY words that name this node
+#             (cuisine roots only: "ilsikdang" -> japanese)
+korean	-	korean	한식	한식
+japanese	-	japanese	일식	일식,일식당
+chinese	-	chinese	중식	중식,중식당,중국집
+western	-	western	양식	양식,양식당
+asian	-	asian	아시안	아시아음식,베트남음식,태국음식
+mexican	-	mexican	멕시칸	멕시코음식,멕시칸
+spicy	-	-	매운맛	-
+pot	-	-	냄비요리	-
+seafood	-	-	해산물	해물,해산물
+mala	spicy	chinese	마라	-
+hotpot	mala	chinese	훠궈	-
+shabu	pot	-	샤브샤브	-
+jeongol	pot	korean	전골	-
+meat_bbq	korean	korean	고기구이	-
+pork_bbq	meat_bbq	korean	삼겹살	-
+galbi	meat_bbq	korean	갈비	-
+gukbap	korean	korean	국밥	-
+set_meal	korean	korean	백반	-
+suyuk	korean	korean	수육	-
+yukhoe	korean	korean	육회	-
+chicken	korean	korean	닭요리	-
+duck	korean	korean	오리	-
+raw_fish	seafood	-	회	-
+shellfish	seafood	-	조개	-
+sushi	japanese	japanese	스시	-
+ramen	japanese	japanese	라멘	-
+udon	japanese	japanese	우동	-
+soba	japanese	japanese	소바	-
+donburi	japanese	japanese	덮밥	-
+katsu	japanese	japanese	카츠	-
+jjajang	chinese	chinese	짜장	-
+jjamppong	chinese	chinese	짬뽕	-
+pasta	western	western	파스타	-
+pizza	western	western	피자	-
+steak	western	western	스테이크	-
+hamburg	western	western	함박	-
+omurice	western	western	오므라이스	-
+burger	western	western	버거	-
+pho	asian	asian	쌀국수	-

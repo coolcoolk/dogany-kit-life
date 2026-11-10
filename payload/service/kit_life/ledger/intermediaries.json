@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "note": "Payment intermediaries: a card SMS / app list names the payment service, not the store, so the item is unknown. Patterns are match corpus, compared after nfkc_casefold_alnum normalisation as a substring of the merchant. Extend by adding an entry; ledgerlib/opaque.py validates this file (tests/test_opaque.py).",
+  "intermediaries": [
+    {"key": "coupangpay", "display_ko": "쿠팡페이", "patterns": ["쿠페이", "쿠팡페이", "coupangpay"]},
+    {"key": "naverpay", "display_ko": "네이버페이", "patterns": ["네이버페이", "네이버파이낸셜", "npay"]},
+    {"key": "tosspay", "display_ko": "토스페이", "patterns": ["토스페이", "토스페이먼츠", "비바리퍼블리카", "tosspay"]},
+    {"key": "kakaopay", "display_ko": "카카오페이", "patterns": ["카카오페이", "kakaopay"]},
+    {"key": "payco", "display_ko": "페이코", "patterns": ["페이코", "payco"]},
+    {"key": "smilepay", "display_ko": "스마일페이", "patterns": ["스마일페이", "smilepay"]},
+    {"key": "kginicis", "display_ko": "KG이니시스", "patterns": ["이니시스", "inicis"]},
+    {"key": "nhnkcp", "display_ko": "NHN KCP", "patterns": ["nhnkcp", "kcp", "한국사이버결제"]},
+    {"key": "danal", "display_ko": "다날", "patterns": ["다날", "danal"]},
+    {"key": "nicepay", "display_ko": "나이스페이", "patterns": ["나이스페이", "나이스정보통신", "nicepay"]},
+    {"key": "kicc", "display_ko": "KICC", "patterns": ["한국정보통신", "kicc"]},
+    {"key": "paypal", "display_ko": "페이팔", "patterns": ["페이팔", "paypal"]}
+  ]
+}

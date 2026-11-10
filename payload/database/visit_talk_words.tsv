@@ -1,0 +1,103 @@
+# visit_talk_words.tsv -- the words the evening-retro small talk reads
+# (database/visit_talk.py; kit_life.sh retro-items / visit-talk-reply /
+# venue-traits). Rule-based, no embeddings: a word here is the whole rule.
+# Code stays ASCII (tools/nonascii-ratchet.py); the Korean lives here.
+#
+# Format: <class> TAB <word> TAB <value or ->
+#   join      a party person named in the same clause JOINED the visit
+#             ("소형석 합류") -> the person angle "joined"
+#   home      a later round / a move ending at a home: the whole round text
+#             equals the word, or ends with "네" / "네 집" (형석이네)
+#   move      a move verb for a line without rounds ("끝나고 형석이네 가서")
+#   life      a person fact worth bringing up later (new job, move, wedding)
+#   ack       a bare acknowledgement: never a person note by itself
+#   trait     venue-trait word -> kit_life:venue:<trait>[:<value>]
+#             (the framework maintainer's DGN-2120 parallel namespace: mood quiet|lively,
+#             seating room|table|bar, drinks_friendly, price low|mid|high,
+#             wait short|long, portion small|large, service attentive|slow)
+#   negate    right before a trait word flips its value (안 시끄러 -> quiet)
+#   drinks    a place-page category word that makes a venue drinks_friendly
+join	합류	-
+join	합류함	-
+join	왔	-
+join	오게 됐	-
+join	불렀	-
+join	깜짝	-
+home	집	-
+home	우리집	-
+home	우리 집	-
+home	자취방	-
+home	본가	-
+move	가서	-
+move	갔	-
+move	넘어가	-
+move	이동	-
+life	이직	-
+life	입사	-
+life	퇴사	-
+life	취업	-
+life	결혼	-
+life	이사	-
+life	승진	-
+life	합격	-
+life	임신	-
+life	출산	-
+life	전역	-
+life	창업	-
+life	유학	-
+ack	응	-
+ack	어	-
+ack	엉	-
+ack	웅	-
+ack	ㅇㅇ	-
+ack	ㅇㅋ	-
+ack	네	-
+ack	넹	-
+ack	그치	-
+ack	맞아	-
+ack	그래	-
+ack	오케이	-
+ack	좋았어	-
+ack	재밌었어	-
+ack	재밌었지	-
+trait	시끄럽	mood:lively
+trait	시끄러	mood:lively
+trait	시끌	mood:lively
+trait	북적	mood:lively
+trait	왁자	mood:lively
+trait	조용	mood:quiet
+trait	룸이 있	seating:room
+trait	룸 있	seating:room
+trait	룸에서	seating:room
+trait	바 자리	seating:bar
+trait	바석	seating:bar
+trait	웨이팅	wait:long
+trait	줄 서	wait:long
+trait	줄을 서	wait:long
+trait	오래 기다	wait:long
+trait	바로 들어	wait:short
+trait	비싸	price:high
+trait	비쌌	price:high
+trait	저렴	price:low
+trait	가성비	price:low
+trait	양 많	portion:large
+trait	양이 많	portion:large
+trait	푸짐	portion:large
+trait	양 적	portion:small
+trait	양이 적	portion:small
+trait	친절	service:attentive
+trait	늦게 나	service:slow
+trait	오래 걸	service:slow
+trait	술 마시기 좋	drinks_friendly
+trait	술 먹기 좋	drinks_friendly
+negate	안 	-
+negate	안	-
+negate	못 	-
+drinks	술집	-
+drinks	주점	-
+drinks	이자카야	-
+drinks	포장마차	-
+drinks	호프	-
+drinks	맥주	-
+drinks	와인	-
+drinks	바(BAR)	-

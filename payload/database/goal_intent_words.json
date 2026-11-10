@@ -1,0 +1,23 @@
+{
+  "_why": "goal-interview --start --said <owner's words>: the tool, not the model, reads whether the opening words already chose a fresh start (live 2026-10-10 22:15, the health agent: '목표상담 처음부터' still got the 3-way fork because --intent rebuild was a prose rule). ko entries match on the text with whitespace removed (substring); en entries match whole words, case-folded. Order of reading: add; fresh_start + whole_set = rebuild; adjust; fresh_start alone = rebuild unless the words name ONE active goal / strand (then adjust: the request keeps its intent). keep (2026-10-11, rehearsal S6.keep_words): the owner keeps the current card ('그대로 둘게요', '바꿀 거 없어요', '유지') -- read after add and fresh_start + whole_set, before adjust and a lone fresh_start (a keep phrase like '바꿀 거 없어요' carries an adjust word, '다시 보니 그대로 둘게요' a fresh-start one); with a full card it returns the move loop's wrap, as the fork's keep pick does.",
+  "fresh_start": {
+    "ko": ["처음부터", "다시", "새로", "다시하자", "새로짜자", "새로잡", "리셋", "전면"],
+    "en": ["from scratch", "start over", "start again", "redo", "fresh start", "from the beginning", "all over again", "again", "reset", "rebuild"]
+  },
+  "adjust": {
+    "ko": ["손보", "손볼", "수정", "조정", "바꾸", "바꿀", "바꿔", "고치", "고칠", "고쳐", "변경"],
+    "en": ["adjust", "tweak", "change", "edit", "fix", "modify", "update", "revise"]
+  },
+  "add": {
+    "ko": ["추가", "하나더", "더잡", "더세우", "더만들"],
+    "en": ["add", "another goal", "one more", "a new goal", "new goal"]
+  },
+  "whole_set": {
+    "ko": ["전부", "전체", "모두", "싹", "통째로"],
+    "en": ["all", "everything", "whole", "entire"]
+  },
+  "keep": {
+    "ko": ["그대로둘", "그대로두", "그대로갈", "그대로할", "그대로가", "그대로유지", "지금그대로", "유지", "바꿀거없", "바꿀게없", "바꿀건없", "바꿀필요없", "안바꿀", "안바꿔", "변경없"],
+    "en": ["keep", "keep my goal", "keep my goals", "keep it", "keep them", "as is", "as it is", "no change", "no changes", "nothing to change", "leave it", "leave them", "stay the same"]
+  }
+}

@@ -1,0 +1,37 @@
+id: photo-link
+type: module
+visibility: public
+status: draft
+version: 0.2.21
+module: module_core
+owns:
+  - "payload/skills-bundle/photo-link/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: dogany-lifekit
+lanes:
+  contract: 1
+  steps:
+    - id: parse
+      lane: llm
+    - id: request
+      lane: rule
+      kind: value
+      carrier: photo_link.py
+      after: parse
+    - id: find
+      lane: llm
+      after: request
+    - id: offer
+      lane: rule
+      kind: value
+      carrier: photo_link.py
+      after: find
+    - id: answer
+      lane: llm
+      after: offer
+    - id: write
+      lane: rule
+      kind: gate
+      carrier: photo_link.py
+      after: answer

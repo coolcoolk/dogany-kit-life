@@ -1,0 +1,54 @@
+{
+  "\ub9cc\ub450": {
+    "grams": 250,
+    "unit": "plate",
+    "legacy_grams": 35,
+    "source": "https://www.foodsafetykorea.go.kr/upload/20150824/20150824011539_1440389739434.pdf#page=170",
+    "basis": "standard_restaurant",
+    "note": "Generic dumpling proxy: MFDS kimchi dumpling serving, about 8 pieces."
+  },
+  "\ub77c\uba74": {
+    "grams": 550,
+    "unit": "bowl",
+    "legacy_grams": 35,
+    "source": "https://various.foodsafetykorea.go.kr/nutrient/",
+    "basis": "standard_restaurant_estimate",
+    "note": "Provisional cooked bowl including broth. Resolve exact public menu data before scaling macros; never scale dry product nutrition to this cooked mass."
+  },
+  "\ub5a1\ubcf6\uc774": {
+    "grams": 200,
+    "unit": "plate",
+    "legacy_grams": 40,
+    "source": "https://www.foodsafetykorea.go.kr/upload/20150824/20150824011539_1440389739434.pdf#page=224",
+    "basis": "standard_restaurant"
+  },
+  "\uc0c8\uc6b0\ud280\uae40": {
+    "grams": 100,
+    "unit": "plate",
+    "legacy_grams": 35,
+    "source": "https://www.foodsafetykorea.go.kr/upload/20150824/20150824011539_1440389739434.pdf#page=172",
+    "basis": "standard_restaurant"
+  },
+  "\ud53c\uc790 \ub77c\uc9c0": {
+    "grams": 150,
+    "unit": "plate",
+    "legacy_grams": 115,
+    "source": "https://various.foodsafetykorea.go.kr/nutrient/general/food/detail.do?searchFoodCd=P101-040000400-F007-002&searchMonthCd=AVG&searchRegionCd=ZZ",
+    "basis": "standard_restaurant",
+    "note": "Generic pizza serving proxy; a known chain or explicit slice count overrides this."
+  },
+  "\uce74\uc624\uce74\ubb34": {
+    "grams": 392,
+    "unit": "bowl",
+    "legacy_grams": 392,
+    "source": "owner-ticket-2026-10-18",
+    "basis": "registered"
+  },
+  "\ud3ec\ucf00\ubcfc": {
+    "grams": 317,
+    "unit": "bowl",
+    "legacy_grams": 317,
+    "source": "owner-ticket-2026-10-18",
+    "basis": "registered"
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "schema": "cooking_catalog/1",
+  "recipes": [
+    {
+      "schema": "cooking_recipe/1",
+      "id": "wellington",
+      "name": "웰링턴 프렙",
+      "base_amount": 300,
+      "amount": 300,
+      "anchor": "meat",
+      "ingredients": [
+        {
+          "id": "meat",
+          "name": "고기",
+          "quantity": 300,
+          "unit": "g",
+          "aliases": [
+            "안심",
+            "소고기"
+          ],
+          "type_hint": "소고기 안심 덩어리"
+        },
+        {
+          "id": "salt",
+          "name": "소금",
+          "quantity": 3,
+          "unit": "g",
+          "type_hint": "고운 소금"
+        },
+        {
+          "id": "mushroom",
+          "name": "버섯",
+          "quantity": 250,
+          "unit": "g",
+          "removable": true,
+          "substitutions": [
+            {
+              "name": "양파",
+              "quantity": 250,
+              "unit": "g",
+              "step_overrides": {
+                "saute": {
+                  "name": "양파 볶기",
+                  "action": "{mushroom}을 팬에서 볶으세요.",
+                  "done_cue": "물기가 없어지고 부드러워지면 불을 끄세요.",
+                  "warning": "검게 타기 전에 불을 끄세요."
+                }
+              },
+              "type_hint": "생양파"
+            }
+          ],
+          "type_hint": "생버섯"
+        },
+        {
+          "id": "oil",
+          "name": "기름",
+          "quantity": 1,
+          "unit": "큰술",
+          "type_hint": "가열용 식용유"
+        },
+        {
+          "id": "mustard",
+          "name": "머스터드",
+          "quantity": 10,
+          "unit": "g",
+          "removable": true,
+          "type_hint": "머스터드 소스"
+        },
+        {
+          "id": "prosciutto",
+          "name": "프로슈토",
+          "quantity": 60,
+          "unit": "g",
+          "removable": true,
+          "type_hint": "얇은 생햄"
+        },
+        {
+          "id": "ginger",
+          "name": "생강",
+          "quantity": 5,
+          "unit": "g",
+          "removable": true,
+          "type_hint": "생강 뿌리"
+        }
+      ],
+      "steps": [
+        {
+          "id": "dry",
+          "name": "고기 물기 닦기",
+          "action": "{meat} 표면을 키친타월로 눌러 닦으세요.",
+          "ingredients": [
+            "meat"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "표면에 눈에 띄는 물기가 없으면 다음으로 가세요.",
+          "phase": "prep",
+          "prereq": [],
+          "kind": "attended",
+          "requires": "board"
+        },
+        {
+          "id": "salt",
+          "name": "고기 밑간",
+          "action": "{meat} 전체에 소금을 골고루 뿌리세요.",
+          "ingredients": [
+            "meat",
+            "salt"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "모든 면에 소금이 얇게 묻으면 다음으로 가세요.",
+          "phase": "prep",
+          "prereq": [
+            "dry"
+          ],
+          "kind": "attended",
+          "requires": "board"
+        },
+        {
+          "id": "sear",
+          "name": "고기 겉면 굽기",
+          "action": "기름을 두른 팬에서 {meat}의 겉면을 돌려 가며 구우세요.",
+          "ingredients": [
+            "meat",
+            "oil"
+          ],
+          "duration_sec": 180,
+          "heat": "medium",
+          "done_cue": "겉면에 갈색이 나면 꺼내 식히세요. 속까지 익히는 단계는 아니에요.",
+          "phase": "prep",
+          "warning": "기름에서 연기가 나면 불을 낮추고 팬을 잠깐 옮기세요.",
+          "prereq": [
+            "salt"
+          ],
+          "kind": "unattended",
+          "requires": "burner",
+          "check_at_sec": 60,
+          "check_cue": "팬 확인: 갈색 나면 굴리기"
+        },
+        {
+          "id": "chop",
+          "name": "{mushroom} 다지기",
+          "action": "{mushroom}을 잘게 다지세요.",
+          "ingredients": [
+            "mushroom"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "쌀알 크기로 고르게 다져지면 다음으로 가세요.",
+          "phase": "prep",
+          "omit_if_missing": [
+            "mushroom"
+          ],
+          "prereq": [
+            "salt"
+          ],
+          "kind": "attended",
+          "requires": "board"
+        },
+        {
+          "id": "saute",
+          "name": "{mushroom} 볶기",
+          "action": "{mushroom}을 팬에서 볶으세요.",
+          "ingredients": [
+            "mushroom"
+          ],
+          "duration_sec": 600,
+          "heat": "medium",
+          "done_cue": "주걱으로 긁은 바닥에 물기가 다시 고이지 않으면 불을 끄세요.",
+          "phase": "prep",
+          "warning": "바삭해지기 전에 불을 끄세요.",
+          "omit_if_missing": [
+            "mushroom"
+          ],
+          "prereq": [
+            "chop",
+            "sear"
+          ],
+          "kind": "unattended",
+          "requires": "burner",
+          "check_at_sec": 300,
+          "check_cue": "팬 확인: 바닥을 저어 물기와 눌어붙음을 확인하세요."
+        },
+        {
+          "id": "ginger",
+          "name": "생강 섞기",
+          "action": "다진 {ginger}을 볶은 버섯에 섞으세요.",
+          "ingredients": [
+            "ginger",
+            "mushroom"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "고르게 섞이면 넓게 펴서 식히세요.",
+          "phase": "prep",
+          "omit_if_missing": [
+            "ginger",
+            "mushroom"
+          ],
+          "prereq": [
+            "saute"
+          ],
+          "kind": "attended",
+          "requires": "board"
+        },
+        {
+          "id": "mustard",
+          "name": "머스터드 바르기",
+          "action": "식힌 {meat} 표면에 {mustard}를 얇게 바르세요.",
+          "ingredients": [
+            "meat",
+            "mustard"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "겉면에 얇게 발렸으면 다음으로 가세요.",
+          "phase": "prep",
+          "omit_if_missing": [
+            "mustard"
+          ],
+          "prereq": [
+            "sear"
+          ],
+          "kind": "attended",
+          "requires": "board"
+        },
+        {
+          "id": "wrap",
+          "name": "고기 감싸기",
+          "action": "랩 위에 재료를 펴고 식힌 {meat}를 단단히 감싸세요.",
+          "ingredients": [
+            "meat",
+            "mushroom",
+            "prosciutto"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "이음새가 닫히고 단단한 원통 모양이면 다음으로 가세요.",
+          "phase": "prep",
+          "prereq": [
+            "mustard",
+            "ginger"
+          ],
+          "kind": "attended",
+          "requires": "board"
+        },
+        {
+          "id": "chill",
+          "kind": "unattended",
+          "requires": "none",
+          "name": "냉장 보관",
+          "action": "감싼 고기를 냉장고에 넣으세요.",
+          "ingredients": [
+            "meat"
+          ],
+          "duration_sec": 1800,
+          "heat": "none",
+          "done_cue": "겉이 차갑고 모양이 단단해졌는지 확인하세요.",
+          "phase": "prep",
+          "warning": "조리할 때까지 냉장 보관하세요.",
+          "prereq": [
+            "wrap"
+          ]
+        }
+      ]
+    },
+    {
+      "schema": "cooking_recipe/1",
+      "id": "salad",
+      "name": "오이 샐러드",
+      "base_amount": 200,
+      "amount": 200,
+      "anchor": "cucumber",
+      "ingredients": [
+        {
+          "id": "cucumber",
+          "name": "오이",
+          "quantity": 200,
+          "unit": "g",
+          "type_hint": "생오이"
+        },
+        {
+          "id": "salt",
+          "name": "소금",
+          "quantity": 2,
+          "unit": "g",
+          "type_hint": "고운 소금"
+        },
+        {
+          "id": "vinegar",
+          "name": "식초",
+          "quantity": 1,
+          "unit": "큰술",
+          "type_hint": "식용 식초"
+        }
+      ],
+      "steps": [
+        {
+          "id": "slice",
+          "name": "오이 썰기",
+          "action": "씻은 오이를 얇게 써세요.",
+          "ingredients": [
+            "cucumber"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "두께가 고르게 썰렸으면 다음으로 가세요.",
+          "phase": "prep"
+        },
+        {
+          "id": "dress",
+          "name": "오이 무치기",
+          "action": "오이에 소금과 식초를 넣고 가볍게 섞으세요.",
+          "ingredients": [
+            "cucumber",
+            "salt",
+            "vinegar"
+          ],
+          "duration_sec": 0,
+          "heat": "none",
+          "done_cue": "양념이 고르게 묻으면 완성이에요.",
+          "phase": "prep"
+        }
+      ]
+    }
+  ]
+}
