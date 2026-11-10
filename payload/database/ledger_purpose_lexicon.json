@@ -1,0 +1,14 @@
+{
+  "labels": [
+    {"label": "생활비", "key": "ledger.onboarding.reduce.role.living", "words": ["생활비", "일상지출", "생필품", "생활용품", "옷", "의류", "잡화"], "buttons": ["household", "clothes"]},
+    {"label": "월급·고정비", "key": "ledger.onboarding.reduce.role.salary_fixed", "words": ["월급", "급여", "고정비", "공과금", "월세", "보험료", "구독", "salary", "fixedbills"], "buttons": []},
+    {"label": "저축", "key": "ledger.onboarding.reduce.role.saving", "words": ["저축", "저금", "적금", "투자", "saving"], "buttons": []},
+    {"label": "사업", "key": "ledger.onboarding.reduce.role.business", "words": ["사업", "업무", "사업비", "회사", "business"], "buttons": []},
+    {"label": "외식·카페", "key": "ledger.onboarding.instrument.use_eat", "words": ["외식", "카페", "커피", "식당", "밥값", "배달", "eatingout", "cafe"], "buttons": ["eat"]},
+    {"label": "장보기·간편식", "key": "ledger.onboarding.instrument.use_shop", "words": ["장보기", "장봐", "장볼", "간편식", "식료품", "마트", "편의점", "groceries", "readymeals"], "buttons": ["shop", "groceries"]},
+    {"label": "취미·여가", "key": "ledger.onboarding.instrument.use_hobby", "words": ["취미", "여가", "게임", "영화", "여행", "hobbies", "leisure"], "buttons": ["hobby"]},
+    {"label": "송금", "key": "ledger.onboarding.instrument.use_transfer", "words": ["송금", "송굼", "쏭금", "이체", "돈보내", "돈보낼", "transfer"], "buttons": ["transfer"]},
+    {"label": "온라인 결제", "key": "ledger.onboarding.instrument.use_online", "words": ["온라인", "온라안", "인터넷결제", "인터넷결재", "인터넷쇼핑", "onlinepayment", "onlineshopping"], "buttons": ["online"]},
+    {"label": "섞여 있어요", "key": "ledger.onboarding.instrument.mixed", "words": ["섞여", "섞어", "섞임", "섞였", "안따짐", "mixed", "amix"], "buttons": ["mixed"]}
+  ]
+}

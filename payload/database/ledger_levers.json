@@ -1,0 +1,14 @@
+{
+  "_doc": "ledger v6 (NS3, D4): the lever rule catalog read by ledger_diag.levers(). Every lever carries a rule id, a number and its parameters; a lever without a number is not emitted. delivery_cut: per_week is the 'order in' cap the rule proposes, min_count the smallest month it speaks about; drop_droppable: min_amount; saving_last_resort is offered only when no spend-side lever closes the gap (D4), share = how much of the stream it proposes to cut. The owner-facing words are the service's (ledgerlib/diagtext.py, i18n ledger.diag.lever.*).",
+  "tier_down": {},
+  "delivery_cut": {
+    "per_week": 2,
+    "min_count": 8
+  },
+  "drop_droppable": {
+    "min_amount": 5000
+  },
+  "saving_last_resort": {
+    "share": 0.5
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "metrics": {
+    "weekly_sessions": {
+      "period": "week",
+      "choices": [
+        2,
+        3,
+        4
+      ],
+      "recommend": 2,
+      "basis": "strength_days"
+    },
+    "session_count": {
+      "period": "week",
+      "choices": [
+        2,
+        3,
+        4
+      ],
+      "recommend": 2,
+      "basis": "strength_days"
+    },
+    "sessions_per_week": {
+      "period": "week",
+      "choices": [
+        2,
+        3,
+        4
+      ],
+      "recommend": 2,
+      "basis": "strength_days"
+    },
+    "monthly_spend": {
+      "period": "month"
+    },
+    "daily_steps": {
+      "period": "day",
+      "unit_copy": "habit.unit.steps"
+    },
+    "steps_per_day": {
+      "period": "day",
+      "unit_copy": "habit.unit.steps"
+    }
+  },
+  "guidelines": {
+    "strength_days": {
+      "minimum": 2,
+      "beginner_returner_range": [
+        2,
+        3
+      ],
+      "source": "WHO Guidelines on physical activity and sedentary behaviour (2020)",
+      "url": "https://www.who.int/initiatives/behealthy/physical-activity",
+      "range_source": {
+        "title": "ACSM Progression models in resistance training for healthy adults (2009), novice frequency",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+        "returner_application": "Use the novice band conservatively when returning from rest; not a separate WHO returner guideline."
+      }
+    }
+  },
+  "directions": {
+    "health": [
+      {
+        "key": "lean",
+        "copy": "habit.direction.lean",
+        "axis": "body_fat_pct"
+      },
+      {
+        "key": "size",
+        "copy": "habit.direction.size",
+        "axis": "skeletal_muscle_kg"
+      },
+      {
+        "key": "shape",
+        "copy": "habit.direction.shape",
+        "axis": "body_fat_pct,skeletal_muscle_kg"
+      }
+    ]
+  }
+}

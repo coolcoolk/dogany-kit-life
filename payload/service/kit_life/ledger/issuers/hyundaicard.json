@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "issuer": "hyundaicard",
+  "display_ko": "현대카드",
+  "method_stems": [
+    "현대"
+  ],
+  "guide": {
+    "sms_available": {
+      "value": true,
+      "status": "verified",
+      "verified_at": "2026-09-24",
+      "source": [
+        "owner:2026-09-24 13:40 (measured on the owner phone)",
+        "https://thisthatbase.com/hyundaicard-alarm-service-apply/"
+      ]
+    },
+    "menu_path": {
+      "value": [
+        "현대카드 앱",
+        "전체 메뉴(☰)",
+        "카드 관리",
+        "카드이용알림 신청",
+        "문자메시지"
+      ],
+      "status": "verified",
+      "verified_at": "2026-09-24",
+      "source": [
+        "owner:2026-09-24 13:40 (measured on the owner phone)",
+        "https://thisthatbase.com/hyundaicard-alarm-service-apply/"
+      ]
+    },
+    "fee": {
+      "value": "월 300원 또는 M포인트 450점 (5만원 이상 결제 알림은 원래 무료)",
+      "status": "verified",
+      "verified_at": "2026-09-24",
+      "source": [
+        "owner:2026-09-24 13:40",
+        "https://thisthatbase.com/hyundaicard-alarm-service-apply/",
+        "https://cardmore.co.kr/%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C-%EA%B2%B0%EC%A0%9C-%EC%95%8C%EB%A6%BC-%EB%AC%B4%EB%A3%8C/"
+      ]
+    },
+    "alt_route": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": []
+    },
+    "sender_numbers": {
+      "value": [
+        "1577-6200"
+      ],
+      "status": "verified",
+      "verified_at": "2026-09-24",
+      "source": [
+        "owner:2026-09-24 19:49 read from the device (approval SMS sender, RCS brand name 현대카드)"
+      ],
+      "note": "오너 휴대폰의 실물 승인 문자 발신번호. RCS 에서는 '현대카드' 이름으로 보이고 번호는 이름을 눌러야 보인다."
+    }
+  },
+  "sms": {
+    "markers": [
+      "현대카드",
+      "(?m)^현대 [A-Za-z0-9]+ 승인"
+    ],
+    "markers_basis": "verified 2026-09-24 from the first real approval SMS: the body does NOT contain the issuer name; its first line after [Web발신] is '현대 <product> 승인' (product = card short name, e.g. M). The plain issuer-name marker is kept only for other message types (notices, ads) and is unverified.",
+    "shortcut_keyword": {
+      "value": "현대 M",
+      "status": "verified",
+      "verified_at": "2026-09-24",
+      "source": [
+        "owner:2026-09-24 19:00 first real approval SMS (RCS, sender shown as 현대카드)"
+      ],
+      "note": "What the owner's own approval SMS starts with (product M). Another Hyundai product shows its own token, so the guide tells the owner to copy it from their own message. '현대카드' never appears in the approval body."
+    },
+    "cancel_template": {
+      "value": null,
+      "status": "unverified",
+      "verified_at": null,
+      "source": [],
+      "note": "No real cancel SMS seen. Its verb is likely '승인취소' in the same first line; unconfirmed, so there is no cancel template and a cancel SMS goes to the model lane (pending)."
+    },
+    "templates": [
+      {
+        "kind": "approval",
+        "pattern": "(?:\\[Web발신\\]\\n)?현대 (?P<product>[A-Za-z0-9]+) 승인\\n\\S+\\n(?P<amount>[0-9][0-9,]*)원 (?P<installment>일시불|[0-9]{1,2}개월)\\n(?P<date>[0-9]{1,2}/[0-9]{1,2}) (?P<time>[0-9]{1,2}:[0-9]{2})\\n(?P<merchant>[^\\n]+)\\n누적[0-9][0-9,]*원",
+        "fixture": "hyundaicard-approval-1",
+        "added_at": "2026-09-24",
+        "method": "현대카드{product}",
+        "merchant_truncated": true,
+        "status": "verified",
+        "verified_at": "2026-09-24",
+        "source": [
+          "owner:2026-09-24 19:00 first real approval SMS (RCS, sender shown as 현대카드)"
+        ],
+        "note": "Lines: [Web발신] / '현대 <product> 승인' / carrier-masked name / amount + 일시불 or N개월 / MM/DD HH:MM / merchant cut to a few characters / 누적 = month-to-date total on the card, NOT a balance, ignored. The '승인' line must end there, so a '승인취소' SMS never matches this template."
+      }
+    ]
+  }
+}

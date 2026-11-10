@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""month-close -- the ledger lines of the monthly settlement (ledger-session
+"monthly settlement", first session of a month).
+
+  month-close <YYYY-MM> [--no-mark]
+
+Prints the owner-facing lines for that month: the month's diagnosis card (every
+number from the kit's ledger-diagnosis, income / regular / variable / levers),
+then a subscription tier change ONCE (shared with the weekly retro: whichever
+says it first) and the month's usage charges said as living costs. Exit 3 =
+nothing to add.
+"""
+import argparse, os, re, sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import diagtext, kit, tiers
+
+ap = argparse.ArgumentParser(prog='month-close')
+ap.add_argument('month')
+ap.add_argument('--no-mark', action='store_true')
+a = ap.parse_args()
+if not re.match(r'^\d{4}-\d{2}$', a.month):
+    print('{"error": "month must be YYYY-MM"}')
+    sys.exit(2)
+try:
+    lines = []
+    try:
+        lines.append(diagtext.render(kit.ledger_diagnosis(a.month)))
+    except kit.KitError:
+        pass                                  # no rows for that month
+    lines += tiers.change_lines(a.month, mark=not a.no_mark) + tiers.usage_lines(a.month)
+except kit.KitError as e:
+    print('{"error": "%s"}' % str(e).replace('"', "'"))
+    sys.exit(2)
+if not lines:
+    sys.exit(3)
+print('\n'.join(lines))

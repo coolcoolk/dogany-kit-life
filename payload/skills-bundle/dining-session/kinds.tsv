@@ -1,0 +1,82 @@
+# kinds.tsv -- dish words -> food kind + traits (module_dining v1 rulebook).
+# Read by venue_facts.py. A venue's KIND set = its place-page category word
+# plus every word below found in its representative (repr) menu names; two
+# cards whose kind sets meet are the same kind of food (the 10-15 round sent
+# two shabu places, one of them labelled "korean" by its category).
+# Traits are read over the WHOLE menu and only reported (menu_flags), with the
+# item names as evidence; the agent states them in the fit line. Nothing here
+# excludes a venue by itself (taste store = later, the framework maintainer Why-net seam).
+#
+# Format: <word> TAB <kind> TAB <traits, comma list or -> TAB <display>
+#   kind     ascii token; generic = a category word that says too little
+#            (the card header then adds the repr kinds)
+#   traits   spicy | very_spicy | chicken | western | fried | greasy |
+#            raw_fish | single (one serving per person as listed) | broth |
+#            category (matched against the place category ONLY: "yangsik"
+#            in a menu means "farmed fish", in "boyangsik" it is a tonic)
+#   display  owner-facing word for the header ('-' = the word itself)
+한식	generic	category	-
+일식당	generic	category	-
+일식	generic	category	-
+중식당	generic	category	-
+중식	generic	category	-
+양식	western	western,category	-
+음식점	generic	category	-
+샤브샤브	shabu	broth	-
+쌀국수	pho	broth,single	-
+훠궈	hotpot	spicy,broth	-
+마라	mala	spicy	-
+마라탕	mala	spicy,single	-
+전골	jeongol	broth	-
+수육	suyuk	-	-
+규카츠	katsu	fried,single	-
+돈가스	katsu	fried,single	-
+돈카츠	katsu	fried,single	-
+카츠	katsu	fried	-
+스시	sushi	raw_fish	-
+초밥	sushi	raw_fish	-
+오마카세	sushi	raw_fish	-
+라멘	ramen	broth,single	-
+우동	udon	broth,single	-
+소바	soba	single	-
+덮밥	donburi	single	-
+정식	set_meal	single	-
+반상	set_meal	single	-
+국밥	gukbap	broth,single	-
+백반	set_meal	single	-
+삼겹	pork_bbq	greasy	삼겹살
+항정	pork_bbq	greasy	-
+갈비	galbi	-	-
+소금구이	pork_bbq	greasy	-
+고기요리	meat_bbq	-	고기구이
+회	raw_fish	raw_fish	-
+육회	yukhoe	-	-
+물회	raw_fish	raw_fish,broth	-
+생선회	raw_fish	raw_fish	회
+조개	shellfish	-	조개구이
+치킨	chicken	chicken,fried	-
+닭	chicken	chicken	-
+닭볶음탕	chicken	chicken,spicy	-
+찜닭	chicken	chicken	-
+닭갈비	chicken	chicken,spicy	-
+오리	duck	-	-
+짬뽕	jjamppong	spicy,broth,single	-
+짜장	jjajang	single	-
+탕수육	chinese	fried	-
+파스타	pasta	western	-
+피자	pizza	western,greasy	-
+스테이크	steak	western	-
+스테키	steak	western	-
+함박	hamburg	western	-
+오므라이스	omurice	western,single	-
+나폴리탄	pasta	western	-
+버거	burger	western,greasy	-
+타코	mexican	-	-
+매운	-	spicy	-
+매콤	-	spicy	-
+얼큰	-	spicy	-
+무진장 매운	-	very_spicy	-
+불닭	-	very_spicy	-
+엽떡	-	very_spicy	-
+튀김	-	fried	-
+가라아게	chicken	chicken,fried	-

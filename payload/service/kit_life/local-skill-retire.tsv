@@ -1,0 +1,9 @@
+# local-skill-retire.tsv -- agent-local skills the kit now ships under its own id.
+# Read by `kit_life.sh skill-alias carry` (database/skill_alias.py): a match is
+# archived to .claude/skills-retired/<local>.<ts>/, BUNDLE_<KIT ID> is set on
+# when undecided, and .claude/skills/<kit id> is linked.
+# A row matches only a REAL dir .claude/skills/<local>/ whose SKILL.md says
+# `name: <local>` and which holds <fingerprint> -- never a same-named stranger.
+#
+# Format: <local id> TAB <kit id> TAB <fingerprint file>
+restaurant-find	dining-session	restaurant_search.py

@@ -1,0 +1,143 @@
+{
+  "cat": [
+    "cat",
+    "고양이",
+    "반려묘",
+    "스코티시 스트레이트",
+    "스코티시스트레이트",
+    "Scottish Straight",
+    "스코티시 폴드",
+    "스코티시폴드",
+    "Scottish Fold",
+    "러시안 블루",
+    "러시안블루",
+    "Russian Blue",
+    "페르시안",
+    "Persian",
+    "샴",
+    "Siamese",
+    "랙돌",
+    "Ragdoll",
+    "메인쿤",
+    "Maine Coon",
+    "브리티시 쇼트헤어",
+    "British Shorthair",
+    "아메리칸 쇼트헤어",
+    "American Shorthair",
+    "노르웨이 숲",
+    "Norwegian Forest Cat",
+    "벵갈",
+    "Bengal",
+    "스핑크스",
+    "Sphynx",
+    "아비시니안",
+    "Abyssinian",
+    "코리안 쇼트헤어",
+    "코리안숏헤어",
+    "브리티시숏헤어",
+    "브리티시 숏헤어",
+    "아메리칸숏헤어",
+    "아메리칸 숏헤어"
+  ],
+  "dog": [
+    "dog",
+    "강아지",
+    "반려견",
+    "개",
+    "푸들",
+    "Poodle",
+    "말티즈",
+    "Maltese",
+    "포메라니안",
+    "Pomeranian",
+    "시츄",
+    "Shih Tzu",
+    "비숑 프리제",
+    "비숑",
+    "Bichon Frise",
+    "골든 리트리버",
+    "Golden Retriever",
+    "래브라도 리트리버",
+    "Labrador Retriever",
+    "치와와",
+    "Chihuahua",
+    "시바 이누",
+    "시바견",
+    "Shiba Inu",
+    "진돗개",
+    "Jindo",
+    "웰시 코기",
+    "코기",
+    "Corgi",
+    "닥스훈트",
+    "Dachshund",
+    "비글",
+    "Beagle",
+    "요크셔 테리어",
+    "Yorkshire Terrier",
+    "보더 콜리",
+    "Border Collie",
+    "시베리안 허스키",
+    "Siberian Husky",
+    "저먼 셰퍼드",
+    "German Shepherd",
+    "Shiba",
+    "시바",
+    "시바이누",
+    "말티스",
+    "토이 푸들",
+    "Toy Poodle"
+  ],
+  "rabbit": [
+    "rabbit",
+    "토끼"
+  ],
+  "hamster": [
+    "hamster",
+    "햄스터"
+  ],
+  "bird": [
+    "bird",
+    "새",
+    "앵무새",
+    "parrot",
+    "budgie"
+  ],
+  "turtle": [
+    "turtle",
+    "tortoise",
+    "거북이"
+  ],
+  "fish": [
+    "fish",
+    "물고기",
+    "금붕어",
+    "goldfish"
+  ],
+  "guinea_pig": [
+    "guinea pig",
+    "기니피그"
+  ],
+  "ferret": [
+    "ferret",
+    "페럿"
+  ],
+  "hedgehog": [
+    "hedgehog",
+    "고슴도치"
+  ],
+  "snake": [
+    "snake",
+    "뱀"
+  ],
+  "lizard": [
+    "lizard",
+    "gecko",
+    "도마뱀",
+    "게코"
+  ],
+  "axolotl": [
+    "axolotl",
+    "아홀로틀"
+  ]
+}
