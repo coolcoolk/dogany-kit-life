@@ -1,0 +1,11 @@
+id: dining-session
+type: module
+visibility: private
+status: poc
+version: 0.1.4
+module: module_dining
+owns:
+  - "agents/.template/.claude/skills-bundle/dining-session/**"
+requires:
+  framework: ">=1.16.0"
+publish_target: none

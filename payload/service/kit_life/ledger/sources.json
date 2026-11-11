@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "note": "Where the owner's weekly spend list comes from, by region. Keys only: owner-facing names are i18n `ledger.app.<key>`. screenshot = apps whose spend-list screenshot the weekly sweep names (shot-stage --app takes any key below, plus 'other'). csv = apps whose export csv-import reads (Banksalad's format only). aggregators = screenshot apps that show every account's balance on one screen (one capture covers all accounts; the onboarding balance step asks for that one capture instead of one per account). A region not listed, or no region at all, uses `default`: no app is named, the sweep question asks which app or bank shows the spending, and the answer is kept as LEDGER_SPEND_APP.",
+  "regions": {
+    "KR": {
+      "match": {
+        "country": [
+          "KR"
+        ],
+        "tz": [
+          "Asia/Seoul"
+        ],
+        "lang": [
+          "ko"
+        ]
+      },
+      "screenshot": [
+        "toss",
+        "banksalad",
+        "kakaopay",
+        "naverpay",
+        "card"
+      ],
+      "csv": [
+        "banksalad"
+      ],
+      "aggregators": [
+        "toss",
+        "banksalad"
+      ],
+      "ask_app": false
+    }
+  },
+  "lookup": {
+    "note": "Session lookups for current capture and export instructions (capture/how), official help first. Cache ttl_days. Only current official steps with a source URL receive an official-check label; current posts retain a separate source label. Failed or stale lookups use generic wording. official lists help entry points, never app menu paths. Legacy export availability verdicts remain readable.",
+    "ttl_days": 30,
+    "apps": {
+      "banksalad": {
+        "official": [
+          "https://www.banksalad.com",
+          "https://help.banksalad.com"
+        ]
+      },
+      "toss": {
+        "official": [
+          "https://support.toss.im"
+        ]
+      },
+      "kakaopay": {
+        "official": [
+          "https://support.kakaopay.com"
+        ]
+      },
+      "naverpay": {
+        "official": [
+          "https://help.pay.naver.com"
+        ]
+      }
+    }
+  },
+  "default": {
+    "screenshot": [],
+    "csv": [],
+    "aggregators": [],
+    "ask_app": true
+  },
+  "balance_bank_prefixes": [
+    "IBK기업은행",
+    "기업은행",
+    "IBK",
+    "토스뱅크",
+    "토스은행",
+    "KB국민은행",
+    "국민은행",
+    "KB",
+    "국민",
+    "신한은행",
+    "신한",
+    "우리은행",
+    "우리",
+    "하나은행",
+    "하나",
+    "NH농협은행",
+    "농협은행",
+    "NH",
+    "농협",
+    "카카오뱅크",
+    "카뱅",
+    "SC제일은행",
+    "제일은행",
+    "케이뱅크",
+    "새마을금고",
+    "신협"
+  ]
+}
