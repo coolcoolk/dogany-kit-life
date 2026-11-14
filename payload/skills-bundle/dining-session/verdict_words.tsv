@@ -1,0 +1,52 @@
+# verdict_words.tsv -- the words that make a recorded reaction a VERDICT on a
+# visit (DGN-2120 v2 §4.2 verdicts liked|neutral|disliked). Read by
+# database/food_pref.py (kit_life.sh dining-history) over block.retro_line and
+# event.reaction. Rule-based, no embeddings: a clause becomes a verdict only
+# when its words say so; anything else gets no verdict and only its ref is
+# kept ("재밌었음" is about the evening, not the food -> no verdict).
+#
+# Format: <class> TAB <word> TAB <verdict or ->
+#   taste    a word about the food itself; stands alone
+#   eval     a general evaluation word; counts only when the same clause
+#            also carries an anchor word, the venue name, or a kinds.tsv word
+#   anchor   names the food / the place ("음식", "맛", "가게" ...)
+#   negate   flips liked <-> disliked in the clause ("안 좋았") -- checked
+#            right before the eval word
+#   group    the clause is the whole party's verdict ("다들 좋았대")
+taste	존맛	liked
+taste	맛있	liked
+taste	맛났	liked
+taste	맛집	liked
+taste	맛없	disliked
+taste	노맛	disliked
+taste	맛이 없	disliked
+taste	맛은 그냥	neutral
+taste	맛은 보통	neutral
+eval	또 가자	liked
+eval	또 가고	liked
+eval	또 올	liked
+eval	최고	liked
+eval	좋았	liked
+eval	괜찮	neutral
+eval	무난	neutral
+eval	그럭저럭	neutral
+eval	보통	neutral
+eval	쏘쏘	neutral
+eval	별로	disliked
+eval	실망	disliked
+eval	최악	disliked
+eval	비추	disliked
+eval	다신 안	disliked
+anchor	음식	-
+anchor	맛	-
+anchor	가게	-
+anchor	식당	-
+anchor	메뉴	-
+anchor	안주	-
+anchor	고기	-
+negate	안 	-
+negate	못 	-
+group	다들	-
+group	모두	-
+group	다 같이	-
+group	우리	-

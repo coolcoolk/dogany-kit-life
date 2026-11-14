@@ -1,0 +1,261 @@
+#!/usr/bin/env python3
+"""Ledger onboarding screen engine.
+
+New starts / restart (owner 2026-11-03):
+  look back / recording only -> file (existing history, import, or held screenshot review)
+  -> analysis: roster, accounts, deposits, refunds, transfers, unknown payments,
+     reduce_big (unknown purchases), reduce_installments (remaining payments),
+     reduce_debts (one loan at a time; each fact question is skippable)
+  -> history (aligned month table, evidence reads, numbered one-fact asks)
+  -> conclusion -> plan_choice (reduce | saving | record)
+  -> reduction target, or existing savings target, or recording completion
+  -> reduce_overview (money bars, budget checklist and 100k+ list once)
+  -> reduce_cap -> reduce_subscriptions -> reduce_subscription_ai
+  -> reduce_subscription_cuts -> reduce_habits -> reduce_goal
+  -> yearly renewal reminders -> completion / apply.
+  The confirmed budget appears below today's pin blocks.
+Recording is always enabled. Fresh opener values: past | record.
+History analysis uses every recorded completed month; current-month data stays out.
+Saved older v7 flows retain their previously chosen parts and recent-window basis.
+History facts: one free-text answer for one item, or
+  {"items":[{"number":1,"kind":"debt|spend|unknown","said":"owner words"}]}
+Numbers refer only to the issued screen; unknown is retained without re-asking.
+Loan outflows remain money out and become repayments, never gap funding.
+Large-purchase fact questions use 1/2 and 2/2 only when both are present;
+a single present question has no counter. Never combine their rendered asks.
+Reduction screens provide answer_format metadata. Translate only the owner's
+words into that format; amounts are exact won and counts are monthly caps.
+All choices require an issued callback or --said. Do not invent answers/skips.
+No history -> recording completion; no fabricated plan.
+UI-GATE is open: exact draft text and acceptance differences are recorded in
+  docs/reports/2026-10-31-ledger-redesign-step3/.
+
+debt-known LOAN_ID
+    Look up a kit-recorded owner value for the pending debt card. No free values.
+known QUESTION_ID
+    Look up an earlier kit-recorded subscription answer. No free values.
+debt-reopen LOAN_ID
+    Explicitly ask one loan's debt question again, including after onboarding.
+
+Existing v6 states resume with their original contract below:
+
+next [--offer] -> {question, lookup?, done}; send ask as HTML and button_rows
+vertically. Answer only the issued id, using choice values or free source text.
+Every answer requires --said "exact owner utterance"; otherwise show the screen.
+Owner callbacks go through tap CALLBACK_DATA. Never invent answers or skips.
+Funding multi-select payloads have multi=true, a grouped numbered HTML list,
+numbered source buttons with ✓ marks after taps, and a done button.
+Relay ask literally; never build an [[OPTIONS]] menu. Answers such as "1, 3",
+"1 3" and "1,3" select list positions; done saves the staged sources together.
+Order: roster -> unresolved funding only -> purpose intro/items -> income.
+The file screen first shows the month-flow example; choices are capture:<app>
+or file:<app>. There is no defer button. Recording is already active; leaving
+this step unanswered keeps a backfill todo and one weekly reminder.
+
+lookup-set APP capture|how found --source official --url URL --steps-json JSON
+lookup-set APP capture|how failed
+    Session performs the returned lookup first; cache TTL is 30 days.
+import FILE [--password-stdin]
+    Existing file importer, passwords stay on stdin only.
+capture --rows JSON --since D --until D [--card NAME]
+    Stage model readings; show and apply the existing review with owner consent,
+    then answer file captured. Unreviewed or empty captures cannot advance.
+answer file continue
+    Compatibility for an owner who explicitly wants to keep recording only.
+next can return question.auto_advance=true for the purpose introduction.
+    Send its ask as its own message, with no buttons, then call next immediately.
+answer review_purpose yes|change|tag:0..4|done
+    One instrument at a time, inferred only from its real recent transactions.
+    change opens the five shared purpose buttons; toggle them, then done.
+    With no supported guess, the same multi-select question opens directly.
+    Each toggle returns card_update: edit_current, fallback: resend_once.
+    Edit the callback's message with the returned literal card (✓ marks included).
+    If editing is unavailable, re-send that question once with its marked buttons.
+    No numeric item picker, custom memo, or account-inheritance explanation.
+answer review_bank_ID BANK|unknown|merge:TARGET_ID
+    next folds proven bank evidence into the full roster.
+    An unresolved bank question describes only this account's actual rows.
+    Use merge:TARGET_ID only for the issued same-account confirmation.
+answer review_roster 'NUMBER CORRECTED_NAME_OR_PAYMENT_SOURCE'
+answer review_roster '{"corrections":[{"number":N,"name":"..."}]}'
+answer review_roster '{"merges":[{"id":SOURCE_ID,"into":TARGET_ID}]}'
+    Repoint confirmed duplicate accounts through the kit transaction.
+answer review_income|review_fixed ok
+answer review_person_ID yes|no|skip|skip_all / answer review_pair_ID SPEND_ID|group:IDS|cash|none|type|skip|skip_all
+    Person/pair questions include card.text and literal card.buttons rows.
+    Keep those labels intact. Full button labels are also accepted by answer.
+    A determined candidate pick applies immediately and returns a result card
+    with a correction button. Person yes --said preserves the owner's words;
+    the relay may resolve the next pair directly from them, including cash
+    for an off-ledger cash reimbursement (pass-through, no expense link).
+tap CALLBACK_DATA
+    Resolve a card button against the issued question; never sends Telegram.
+answer review_odd_ID monthly|quarterly|semiannual|yearly (cycle) or transit|ok
+answer review_living '{"one_off":[SPEND_ID],"subscriptions":[SPEND_ID]}'
+    Map the owner's named purchases to ids in question.review; ok means none.
+answer review_cards capture|captured|skip
+    capture holds this screen. Read the requested card-app installment list,
+    confirm its details with the owner and save through installment-add or
+    installment-confirm; captured advances only after those records change.
+answer diagnosis fix --fix N=... | <choice>
+    Existing correction and goal actions. No balance question.
+fixed-correct NAME_OR_ID cycle=yearly [amount=N] [next_due=D] [name=TEXT]
+    Relay say (the tool's correction outcome), then the returned pending
+    question. Figures refresh; this does not answer or advance the question.
+apply --spend-app APP / apply --sweep thu@20:00
+    Persist an explicit weekly source or separate sweep time after completion.
+say 'OWNER WORDS' --spend-app APP / say 'OWNER WORDS' --sweep thu@20:00
+    Apply typed reconciliation preferences; wording is evidence only.
+say 'OWNER WORDS' [RECEIPT_ID] / revisit [RECEIPT_ID]
+    Issue a fresh Candidate A correction during or after onboarding.
+allocation RECEIPT_ID JSON
+    Preview explicit expense shares and payers; confirmation is a separate tap.
+apply / restart / propose / verdict / offered / declined / state
+    Existing lifecycle commands. --today D pins dates for replays.
+
+See README.md for the full service contract. Never sends a message itself.
+"""
+import argparse, datetime, json, os, sys
+from zoneinfo import ZoneInfo
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import kit, onboarding, allocation, reconciliation
+
+CMDS = ('verdict', 'offered', 'declined', 'next', 'answer', 'tap', 'import', 'restart', 'propose', 'apply', 'state',
+        'lookup', 'lookup-set', 'product-note', 'capture', 'revisit', 'say', 'allocation', 'fixed-correct',
+        'known', 'debt-known', 'debt-reopen', 'allocation-undo')
+ap = argparse.ArgumentParser(prog='onboarding')
+ap.add_argument('command', choices=CMDS)
+ap.add_argument('args', nargs='*')
+ap.add_argument('--today')
+ap.add_argument('--archive', type=int)
+ap.add_argument('--sweep')
+ap.add_argument('--spend-app')
+ap.add_argument('--auto')
+ap.add_argument('--plan')
+ap.add_argument('--said')
+ap.add_argument('--tags', help='instrument purpose labels from the returned fixed vocabulary, comma-separated')
+ap.add_argument('--fix', action='append', default=[])
+ap.add_argument('--offer', action='store_true')
+ap.add_argument('--password-stdin', action='store_true')
+ap.add_argument('--source')
+ap.add_argument('--url')
+ap.add_argument('--steps-json')
+ap.add_argument('--rows')
+ap.add_argument('--since')
+ap.add_argument('--until')
+ap.add_argument('--card')
+ap.add_argument('--direction')
+a = ap.parse_args()
+try:
+    if a.command == 'verdict':
+        v, reason = onboarding.verdict()
+        print('VERDICT\t%s\t%s' % (v, reason))
+        if v == 'OFFER':
+            print('ENTRY\t' + onboarding.ENTRY)
+        sys.exit(0 if v == 'OFFER' else 3)
+    if a.command in ('offered', 'declined'):
+        st = onboarding.record(a.command)
+        print(json.dumps({'offers': st.get('offers', 0), 'declines': st.get('declines', 0)}))
+        sys.exit(0)
+    if a.command == 'state':
+        print(json.dumps(onboarding.load_state(), ensure_ascii=False, sort_keys=True))
+        sys.exit(0)
+    today = (datetime.date.fromisoformat(a.today) if a.today else
+             datetime.datetime.now(ZoneInfo('Asia/Seoul')).date())
+    if a.command == 'fixed-correct':
+        if len(a.args) < 2 or any('=' not in field for field in a.args[1:]):
+            raise ValueError('fixed-correct needs NAME_OR_ID field=value [...]')
+        out = onboarding.fixed_correct(a.args[0], dict(field.split('=', 1) for field in a.args[1:]),
+                                       direction=a.direction, today=today)
+    elif a.command == 'debt-known':
+        if len(a.args) != 1 or a.said:
+            raise ValueError('debt-known needs LOAN_ID only; values come from kit records')
+        out = onboarding.debt_known(int(a.args[0]))
+    elif a.command == 'debt-reopen':
+        if len(a.args) != 1:
+            raise ValueError('debt-reopen needs LOAN_ID')
+        out = onboarding.debt_reopen(int(a.args[0]), today=today)
+    elif a.command == 'allocation-undo':
+        if len(a.args) != 1:
+            raise ValueError('allocation-undo needs the linked RECEIPT_ID')
+        out = allocation.undo(int(a.args[0]))
+    elif a.command == 'revisit':
+        out = allocation.open_editor(int(a.args[0]) if a.args else None)
+    elif a.command == 'say':
+        if not a.args:
+            raise ValueError('say needs owner evidence; any wording is accepted')
+        if a.spend_app is not None or a.sweep is not None:
+            out = reconciliation.say(a.args[0], today=today, spend_app=a.spend_app, sweep=a.sweep)
+        else:
+            out = allocation.say(a.args[0], int(a.args[1]) if len(a.args)>1 else None)
+    elif a.command == 'allocation':
+        if len(a.args)!=2:
+            raise ValueError('allocation needs receipt id and allocation JSON')
+        data = json.loads(a.args[1])
+        out = allocation.preview(int(a.args[0]), data['allocations'], data.get('partial',False))
+    elif a.command == 'known':
+        if len(a.args) != 1 or a.said:
+            raise ValueError('known needs QUESTION_ID only; values come from kit records')
+        out = onboarding.known(a.args[0])
+    elif a.command == 'next':
+        out = onboarding.next_question(today=today, offer=a.offer)
+    elif a.command == 'tap':
+        if len(a.args) != 1:
+            raise ValueError('tap needs <callback_data>')
+        out = onboarding.tap(a.args[0], today=today)
+    elif a.command == 'answer':
+        if len(a.args) not in (1, 2):
+            raise ValueError('answer needs <id> [<value>]')
+        out = onboarding.answer(a.args[0], a.args[1] if len(a.args) == 2 else '', said=a.said, today=today,
+                                fixes=a.fix, tags=a.tags)
+    elif a.command == 'import':
+        if len(a.args) != 1:
+            raise ValueError('import needs <file>')
+        # the password: one stdin line, this call only (never argv / state / log)
+        pw = sys.stdin.readline().rstrip('\r\n') if a.password_stdin else None
+        out = onboarding.import_file(a.args[0], today=today, password=pw or None)
+        pw = None
+    elif a.command == 'capture':
+        if not a.rows or not a.since or not a.until:
+            raise ValueError('capture needs --rows JSON --since D --until D')
+        out = onboarding.capture(json.loads(a.rows), datetime.date.fromisoformat(a.since),
+                                 datetime.date.fromisoformat(a.until), card=a.card, today=today)
+    elif a.command == 'lookup':
+        out = onboarding.lookup_status(today=today)
+    elif a.command == 'lookup-set':
+        if len(a.args) != 3:
+            raise ValueError('lookup-set needs <app> export|how <verdict>')
+        out = onboarding.lookup_set(a.args[0], a.args[1], a.args[2], source=a.source, url=a.url,
+                                    steps_json=a.steps_json, today=today)
+    elif a.command == 'product-note':
+        if len(a.args) != 1:
+            raise ValueError('product-note needs <text>')
+        out = onboarding.product_note(a.args[0], today=today)
+    elif a.command == 'restart':
+        out = onboarding.restart(today=today)
+    elif a.command == 'propose':
+        out = onboarding.propose(today=today)
+    else:
+        auto = None if a.auto is None else [x for x in a.auto.split(',') if x.strip()]
+        aliases = json.load(open(a.plan))['alias_writes'] if a.plan else []
+        out = onboarding.run_apply(archive=a.archive, sweep=a.sweep, auto=auto, alias_writes=aliases, today=today, spend_app=a.spend_app)
+    if a.command in ('next', 'import', 'answer', 'tap', 'apply'):
+        # Large roster payloads can be persisted/truncated by the model's
+        # tool runner. Put the turn-wide relay contract before that payload
+        # so the preview cannot hide it behind question/card duplicates.
+        out = dict(relay=out.get('relay') or onboarding.VERBATIM_RELAY,
+                   **{key: value for key, value in out.items() if key != 'relay'})
+        # Keep preconditions visible even when a caller projects stdout to
+        # ask/choices with jq. These are machine instructions, never UI.
+        print('LEDGER_RELAY ' + out['relay'], file=sys.stderr)
+        q = out.get('question') or {}
+        contract = {key: q[key] for key in ('memory_lookup', 'instructions',
+                    'capture_format', 'answer_format', 'principal_subtraction_format',
+                    'interest_free_balance_format', 'missing_fields') if key in q}
+        if contract:
+            print('LEDGER_INPUT ' + json.dumps(contract, ensure_ascii=False), file=sys.stderr)
+    print(json.dumps(out, ensure_ascii=False, default=str))
+except (ValueError, kit.KitError) as e:
+    print(json.dumps({'error': str(e)}, ensure_ascii=False))
+    sys.exit(2)

@@ -1,0 +1,495 @@
+{
+  "schema": "cooking_nutrition/1",
+  "source_url": "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/SR-Legacy/SR-Leg_ASC.zip",
+  "note": "Generic substitutions and unit densities are estimates, never product labels. Cache entries override these defaults. Liquid ml defaults to 1g/ml; explicit density or grams_per_unit overrides. Distilled spirit alcohol uses stated ABV, or an estimated 40%.",
+  "foods": [
+    {
+      "ndb": "23336",
+      "description": "Beef, loin, tenderloin roast, boneless, separable lean and fat, trimmed to 0\" fat, all grades, raw",
+      "names": [
+        "beef tenderloin",
+        "소고기",
+        "안심"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 23336; generic ingredient estimate",
+      "kcal": 149.0,
+      "protein": 21.67,
+      "carb": 0.0,
+      "fat": 6.93,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "11260",
+      "description": "Mushrooms, white, raw",
+      "names": [
+        "mushroom",
+        "버섯"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 11260; generic ingredient estimate",
+      "kcal": 22.0,
+      "protein": 3.09,
+      "carb": 3.26,
+      "fat": 0.34,
+      "fiber": 1.0,
+      "sugar": 1.98,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "07029",
+      "description": "Ham, sliced, regular (approximately 11% fat)",
+      "names": [
+        "prosciutto",
+        "프로슈토"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 07029; generic ingredient estimate",
+      "kcal": 164.0,
+      "protein": 16.6,
+      "carb": 3.63,
+      "fat": 8.8,
+      "fiber": 1.3,
+      "sugar": 1.0,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "18337",
+      "description": "Puff pastry, frozen, ready-to-bake",
+      "names": [
+        "puff pastry",
+        "퍼프 페이스트리",
+        "페이스트리"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 18337; generic ingredient estimate",
+      "kcal": 551.0,
+      "protein": 7.3,
+      "carb": 45.1,
+      "fat": 38.1,
+      "fiber": 1.5,
+      "sugar": 0.74,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "20083",
+      "description": "Wheat flour, white, bread, enriched",
+      "names": [
+        "bread flour",
+        "강력분",
+        "밀가루"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 20083; generic ingredient estimate",
+      "kcal": 361.0,
+      "protein": 11.98,
+      "carb": 72.53,
+      "fat": 1.66,
+      "fiber": 2.4,
+      "sugar": 0.31,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "01077",
+      "description": "Milk, whole, 3.25% milkfat, with added vitamin D",
+      "names": [
+        "milk",
+        "우유"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 01077; generic ingredient estimate",
+      "kcal": 61.0,
+      "protein": 3.15,
+      "carb": 4.8,
+      "fat": 3.25,
+      "fiber": 0.0,
+      "sugar": 5.05,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "01123",
+      "description": "Egg, whole, raw, fresh",
+      "names": [
+        "egg",
+        "계란",
+        "달걀"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 01123; generic ingredient estimate",
+      "kcal": 143.0,
+      "protein": 12.56,
+      "carb": 0.72,
+      "fat": 9.51,
+      "fiber": 0.0,
+      "sugar": 0.37,
+      "alcohol": 0.0,
+      "piece_grams": 50
+    },
+    {
+      "ndb": "01124",
+      "description": "Egg, white, raw, fresh",
+      "names": [
+        "egg white",
+        "흰자",
+        "계란 흰자"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 01124; generic ingredient estimate",
+      "kcal": 52.0,
+      "protein": 10.9,
+      "carb": 0.73,
+      "fat": 0.17,
+      "fiber": 0.0,
+      "sugar": 0.71,
+      "alcohol": 0.0,
+      "piece_grams": 33
+    },
+    {
+      "ndb": "01125",
+      "description": "Egg, yolk, raw, fresh",
+      "names": [
+        "egg yolk",
+        "노른자",
+        "계란 노른자"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 01125; generic ingredient estimate",
+      "kcal": 322.0,
+      "protein": 15.86,
+      "carb": 3.59,
+      "fat": 26.54,
+      "fiber": 0.0,
+      "sugar": 0.56,
+      "alcohol": 0.0,
+      "piece_grams": 17
+    },
+    {
+      "ndb": "01145",
+      "description": "Butter, without salt",
+      "names": [
+        "butter",
+        "버터",
+        "무염버터"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 01145; generic ingredient estimate",
+      "kcal": 717.0,
+      "protein": 0.85,
+      "carb": 0.06,
+      "fat": 81.11,
+      "fiber": 0.0,
+      "sugar": 0.06,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "14037",
+      "description": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof",
+      "names": [
+        "gin",
+        "진",
+        "럼",
+        "rum"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 14037; generic ingredient estimate",
+      "kcal": 231.0,
+      "protein": 0.0,
+      "carb": 0.0,
+      "fat": 0.0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "alcohol": 33.4
+    },
+    {
+      "ndb": "09152",
+      "description": "Lemon juice, raw",
+      "names": [
+        "lemon juice",
+        "레몬즙"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 09152; generic ingredient estimate",
+      "kcal": 22.0,
+      "protein": 0.35,
+      "carb": 6.9,
+      "fat": 0.24,
+      "fiber": 0.3,
+      "sugar": 2.52,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "18375",
+      "description": "Leavening agents, yeast, baker's, active dry",
+      "names": [
+        "yeast",
+        "이스트",
+        "드라이이스트"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 18375; generic ingredient estimate",
+      "kcal": 325.0,
+      "protein": 40.44,
+      "carb": 41.22,
+      "fat": 7.61,
+      "fiber": 26.9,
+      "sugar": 0.0,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "11216",
+      "description": "Ginger root, raw",
+      "names": [
+        "ginger",
+        "생강"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 11216; generic ingredient estimate",
+      "kcal": 80.0,
+      "protein": 1.82,
+      "carb": 17.77,
+      "fat": 0.75,
+      "fiber": 2.0,
+      "sugar": 1.7,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "02046",
+      "description": "Mustard, prepared, yellow",
+      "names": [
+        "mustard",
+        "머스터드"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 02046; generic ingredient estimate",
+      "kcal": 60.0,
+      "protein": 3.74,
+      "carb": 5.83,
+      "fat": 3.34,
+      "fiber": 4.0,
+      "sugar": 0.92,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "04053",
+      "description": "Oil, olive, salad or cooking",
+      "names": [
+        "oil",
+        "기름",
+        "올리브오일"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 04053; generic ingredient estimate",
+      "kcal": 884.0,
+      "protein": 0.0,
+      "carb": 0.0,
+      "fat": 100.0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "alcohol": 0.0,
+      "tablespoon_grams": 13.5
+    },
+    {
+      "ndb": "11282",
+      "description": "Onions, raw",
+      "names": [
+        "onion",
+        "양파"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 11282; generic ingredient estimate",
+      "kcal": 40.0,
+      "protein": 1.1,
+      "carb": 9.34,
+      "fat": 0.1,
+      "fiber": 1.7,
+      "sugar": 4.24,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "01053",
+      "description": "Cream, fluid, heavy whipping",
+      "names": [
+        "cream",
+        "생크림"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 01053; generic ingredient estimate",
+      "kcal": 340.0,
+      "protein": 2.84,
+      "carb": 2.84,
+      "fat": 36.08,
+      "fiber": 0.0,
+      "sugar": 2.92,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "19335",
+      "description": "Sugars, granulated",
+      "names": [
+        "sugar",
+        "설탕"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 19335; generic ingredient estimate",
+      "kcal": 387.0,
+      "protein": 0.0,
+      "carb": 99.98,
+      "fat": 0.0,
+      "fiber": 0.0,
+      "sugar": 99.8,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "02047",
+      "description": "Salt, table",
+      "names": [
+        "salt",
+        "소금"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 02047; generic ingredient estimate",
+      "kcal": 0.0,
+      "protein": 0.0,
+      "carb": 0.0,
+      "fat": 0.0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "14411",
+      "description": "Beverages, water, tap, drinking",
+      "names": [
+        "water",
+        "물",
+        "탄산수"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 14411; generic ingredient estimate",
+      "kcal": 0.0,
+      "protein": 0.0,
+      "carb": 0.0,
+      "fat": 0.0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "10010",
+      "description": "Pork, fresh, leg (ham), whole, separable lean only, raw",
+      "names": [
+        "pork",
+        "뒷다리살",
+        "돼지 뒷다리살"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 10010; generic ingredient estimate",
+      "kcal": 136.0,
+      "protein": 20.48,
+      "carb": 0.0,
+      "fat": 5.41,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "11215",
+      "description": "Garlic, raw",
+      "names": [
+        "garlic",
+        "마늘",
+        "다진 마늘"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 11215; generic ingredient estimate",
+      "kcal": 149.0,
+      "protein": 6.36,
+      "carb": 33.06,
+      "fat": 0.5,
+      "fiber": 2.1,
+      "sugar": 1.0,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "11352",
+      "description": "Potatoes, flesh and skin, raw",
+      "names": [
+        "potato",
+        "감자",
+        "냉동 간 감자"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 11352; generic ingredient estimate",
+      "kcal": 77.0,
+      "protein": 2.05,
+      "carb": 17.49,
+      "fat": 0.09,
+      "fiber": 2.1,
+      "sugar": 0.82,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "02030",
+      "description": "Spices, pepper, black",
+      "names": [
+        "black pepper",
+        "후추"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 02030; generic ingredient estimate",
+      "kcal": 251.0,
+      "protein": 10.39,
+      "carb": 63.95,
+      "fat": 3.26,
+      "fiber": 25.3,
+      "sugar": 0.64,
+      "alcohol": 0.0
+    },
+    {
+      "ndb": "20120",
+      "description": "Pasta, dry, enriched",
+      "names": [
+        "pasta",
+        "파스타",
+        "파스타 면"
+      ],
+      "grams": 100,
+      "estimated": true,
+      "source": "USDA SR Legacy 2018, NDB 20120; generic ingredient estimate",
+      "kcal": 371.0,
+      "protein": 13.04,
+      "carb": 74.67,
+      "fat": 1.51,
+      "fiber": 3.2,
+      "sugar": 2.67,
+      "alcohol": 0.0
+    }
+  ]
+}

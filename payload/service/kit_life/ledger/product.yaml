@@ -1,0 +1,79 @@
+id: ledger-module-service
+type: module
+visibility: private
+status: official
+version: 0.7.25
+module: module_ledger
+owns:
+  - "payload/service/kit_life/ledger/**"
+requires:
+  framework: ">=2.6.0"
+publish_target: none
+
+# D10 lanes. Rule = deterministic code; model = the agent session's own model
+# reading, always followed by a rule-lane verify and a human-reviewed hold.
+lanes:
+  - step: roster confirmation, three-month living proposal, per-card material residuals
+    lane: rule
+    carrier: ledgerlib/onboarding.py; database/ledger_review.py owns proposals and atomic corrections
+    verify: recurring confirmations return persisted stream ids; every material positive card residual has its own review and skip
+    hold: owner confirms proposed changes; statement and installment evidence remain optional
+  - step: insurance fact and cross-month medical reimbursement
+    lane: rule
+    carrier: ledger-review-answer insurance / insurance_said; receipt annotations derive insurance_reimbursement without changing imported amounts
+    verify: matching receipt and eligible medical spend required for counted=true; unmatched statements persist as pending
+    hold: owner confirms the medical link; merchant refunds never establish insurer receipt evidence
+  - step: second-venue receipt correction and mixed-payer netting
+    lane: rule
+    carrier: ledgerlib/allocation.py issues Candidate A; kit ledger-allocation owns preview/replace/undo in schema 093
+    verify: receipt revision, issuance, evidence fingerprint, signed transfer sum and shared expense capacity
+    hold: only the issued confirmation writes; onboarding resumes after replacement
+  - step: weekly-sweep screenshot -> rows
+    lane: model
+    carrier: agent session reads the owner's screenshot, passes rows to `shot-stage`
+    verify: ledgerlib/shot.py validate_row (positive int amount, ISO date inside the sweep window and not future, merchant with a letter, card present)
+    hold: always pending (kit.intake_add_held -- G1 adapter), reviewed in the weekly retro
+  - step: Banksalad export -> landed rows (identity, bucket reconcile with the ledger, classes, streams)
+    lane: rule
+    carrier: kit ledger-import (database/ledger_v6.py; database/sheet_read.py reads csv / xlsx / zip with stdlib; password on stdin for one call)
+  - step: card SMS from the Dogany app -> which rows
+    lane: rule
+    carrier: ledgerlib/collector.py + receiver.py (receiver store read-only, cursor; app >= 0.4; sender key registered by the owner, first-seen sender held and asked once)
+  - step: card SMS -> fields
+    lane: rule
+    carrier: ledgerlib/smsparse.py apply_templates (issuers/<issuer>.json sms.templates; real samples only, first Hyundai approval)
+  - step: card SMS no template knows -> fields
+    lane: model
+    carrier: agent session reads `sms-stage show`
+    verify: ledgerlib/smsparse.py verify_model_reading (amount + merchant literally in the text, date window, issuer)
+    hold: always pending (kit.intake_add_held), reviewed in the daily retro
+  - step: duplicate / cross-source match
+    lane: rule
+    carrier: kit intake matcher + this module's match rule (ledgerlib/kit.py MATCH_RULE); pending twins across sources by ledgerlib/review.py _pending_twin
+  - step: cancel pairing
+    lane: rule
+    carrier: ledgerlib/review.py (approval number, else amount + merchant + method)
+  - step: onboarding steps and their order (flow v6: aim -> app -> example -> capture/file -> month flow -> goals -> done)
+    lane: rule
+    carrier: ledgerlib/onboarding.py _ids / next_question / answer (one message per turn; apply refuses while a chosen action is unexecuted)
+  - step: parse, canonical payment methods (account | card | wallet), classes (own move, top-up, card bill, pass-through, saving, loan, meal points), import identity + bucket reconcile, streams, keep proposals, levers, diagnosis numbers
+    lane: rule
+    carrier: kit ledger-import / ledger-diagnosis (database/ledger_v6.py, database/ledger_diag.py; data: ledger_category_map.json, ledger_keep_rules.json, ledger_levers.json)
+  - step: owner words -> structured fixes (stop a stream, keep class, amount, name, person link, funding fact, company-card yes)
+    lane: model
+    carrier: agent session turns the owner's words into `onboarding answer diagnosis --fix N=...`, `spend-person-rule-add`, `funding-set`; the rule lane stores them
+    verify: ledgerlib/onboarding.py _parse_fixes (closed grammar, stream numbers of the card) + kit verbs (a stream stops only with stopped_by=owner)
+  - step: the diagnosis card words
+    lane: rule
+    carrier: ledgerlib/dashboard.py for onboarding; ledgerlib/diagtext.py for monthly review (i18n; every number from the kit)
+  - step: current capture or file-export instructions for the chosen method
+    lane: model
+    carrier: agent session web lookup (official help first, else recent posts) when `onboarding next` answers lookup
+    verify: ledgerlib/lookup.py put (verdict enum, source official|posts, 1..12 steps), cached 30 days with the date
+    hold: only current official steps carry the official source/date; recent posts name their own source; failed or stale results show generic wording with no menu path
+  - step: subscription charge -> tier or usage; tier change
+    lane: rule
+    carrier: kit sub-tiers / ledger-diagnosis levers (database/subscription_tiers.json band table) + ledgerlib/tiers.py (once per month)
+  - step: automation verification
+    lane: rule
+    carrier: ledgerlib/automation.py (first tagged mail per issuer, foreign sender, empty body, 3-day nudge)

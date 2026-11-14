@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+"""shot-stage -- weekly-sweep screenshot intake. The session model reads the
+owner's spend-list screenshot(s) and passes the rows here; this validates
+every row and stages the valid ones ALWAYS pending for the review.
+
+  shot-stage --since YYYY-MM-DD --until YYYY-MM-DD --rows JSON
+             [--app KEY] [--card NAME] [--today D]
+
+JSON = [{"date","amount","merchant"[,"card"][,"type":"payment|cancel|transfer|income"]}, ...]
+  --since/--until  the sweep window (the week asked for); rows outside refuse
+  --app            the app the screenshot is from: a key in sources.json
+                   (toss, banksalad, kakaopay, naverpay, card ...) or other
+  --card           card for every row when the screenshot is one card's list
+
+Output: counts by kit status, rejected rows with their reasons, and `say`
+(one owner-facing Korean line). Never writes a spend.
+"""
+import argparse, datetime, json, os, sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ledgerlib import kit, shot
+
+ap = argparse.ArgumentParser(prog='shot-stage')
+ap.add_argument('--since', required=True)
+ap.add_argument('--until', required=True)
+ap.add_argument('--rows', required=True)
+ap.add_argument('--app', default='other')
+ap.add_argument('--card')
+ap.add_argument('--today')
+a = ap.parse_args()
+try:
+    rows = json.loads(a.rows)
+    if not isinstance(rows, list):
+        raise ValueError('rows must be a JSON array')
+    out = shot.stage(rows, datetime.date.fromisoformat(a.since), datetime.date.fromisoformat(a.until),
+                     app=a.app, card=a.card,
+                     today=datetime.date.fromisoformat(a.today) if a.today else None)
+except (ValueError, kit.KitError) as e:
+    print(json.dumps({'error': str(e)}, ensure_ascii=False))
+    sys.exit(2)
+print(json.dumps(out, ensure_ascii=False, sort_keys=True))
